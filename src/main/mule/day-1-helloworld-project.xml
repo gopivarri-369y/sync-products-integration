@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="day-1-helloworld-projectFlow" doc:id="32acbbf8-41fc-4120-bde3-2cacf174de7f" >
+		<http:listener doc:name="Listener" doc:id="2e5b0d0e-7954-44ca-8530-e44d342e1c07" config-ref="HTTP_Listener_config_port_8081" path="/hello"/>
+		<logger level="INFO" doc:name="incoming Request Log" doc:id="31b36d92-a30f-4d2a-858f-a5d8f26b0f6c" message='#[["",&#10;"Entered into the helloworld flow"]]'/>
+		<ee:transform doc:name="helloWorld payload" doc:id="27f78869-c496-4ebe-ab5e-440ea8446cbb" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message" : "helloworld"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
