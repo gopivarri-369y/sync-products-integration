@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="syc-product-integration-papi-test-suite.xml" />
+	<munit:test name="syc-product-integration-papi-test-suite-get:\fetchdata:syc-product-integration-papi-configTest" doc:id="83c99dd4-8b46-4e77-bad4-a160dbd2774d" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="c235b1a4-be55-452e-8470-326557e80bf0" processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="syc-product-integration-papi-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get:\fetchdata:syc-product-integration-papi-config" doc:id="f7dea42a-ea9c-455e-b948-fe9414ae21cf" name="get:\fetchdata:syc-product-integration-papi-config"/>
+		</munit:execution>
+	</munit:test>
+
+
+</mule>

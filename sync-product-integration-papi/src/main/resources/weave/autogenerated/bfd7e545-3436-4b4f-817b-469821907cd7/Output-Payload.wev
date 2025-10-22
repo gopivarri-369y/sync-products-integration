@@ -1,0 +1,11 @@
+%dw 2.0
+
+type auto_bfd7e545_3436_4b4f_817b_469821907cd7_Output_Payload = {|
+  errorOrigin: String, 
+  status: String, 
+  message: String | Null, 
+  description: String | Null, 
+  timestamp: DateTime, 
+  details: Null
+|}
+

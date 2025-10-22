@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:email="http://www.mulesoft.org/schema/mule/email" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd">
+	<sub-flow name="fetching-Request-dataSub_Flow" doc:id="c4809607-77f0-4e4c-bf97-43b0aa863d2a" >
+		<logger level="INFO" doc:name="entryCheck" doc:id="3c588805-d60e-42d5-bfb2-fe6fa61edf51" message='#["Entered into the fetchReaquest Flow"]'/>
+		<until-successful maxRetries="3" doc:name="Until Successful" doc:id="a6a8f9c9-3d78-4d2d-9af2-21a8d53a7e0d" millisBetweenRetries="6000">
+			<logger level="INFO" doc:name="requestEntry" doc:id="25ad2286-b64c-438c-a814-417706e25e17" message='#["entrying Into The products Request"]'/>
+			<http:request method="GET" doc:name="fetchingTheFakestoreapi" doc:id="16a29d70-2298-4ab4-99bf-cd7c98a59f5b" config-ref="products_request_config" path="/${request.path}" />
+			<logger level="INFO" doc:name="requestExit" doc:id="82c4e797-a165-48bc-937e-70fbc7557d17" message='#["Exiting From the products Request"]'/>
+		</until-successful>
+		<ee:transform doc:name="validating the data" doc:id="bc68a5ba-44d7-4c63-8b44-809c3eaed5a3" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable resource="dwl/validation.dwl" variableName="validation" />
+			</ee:variables>
+		</ee:transform>
+		<foreach doc:name="For Each" doc:id="3cc0ce18-68f7-4f62-a595-754295941790" collection="#[vars.validation.validData]">
+			<!-- [STUDIO:"Scatter-Gather"]<scatter-gather doc:name="Scatter-Gather" doc:id="00a025a6-38f3-4e36-8224-eec5781ad203" >
+				<route >
+					<http:request method="POST" doc:name="databaseRequestCall" doc:id="83502760-091d-4e29-9fae-02c21dc3ec07" config-ref="database-request-call" path="/${dbcall.path}" responseTimeout="300000">
+					</http:request>
+				</route>
+				<route >
+					<http:request method="POST" doc:name="salesforceRequestCall" doc:id="0a52da2e-0c1c-499f-9aef-ea4fbb5dc67b" config-ref="salesforce-Request-call" path="/${sfcall.path}" responseTimeout="300000">
+					</http:request>
+				</route>
+			</scatter-gather> [STUDIO] -->
+			<set-variable value="#[output application/json&#10;---&#10;[]]" doc:name="responses Variable" doc:id="53c063c1-ef67-4efd-b413-8d2d8c5a2c67" variableName="responses"/>
+			<ee:transform doc:name="eachRecordVaraible" doc:id="4bc44593-1174-4e03-9374-ed5c53e3c57b" >
+				<ee:message >
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="eachRecordVaraible" ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<try doc:name="Try" doc:id="05a5ac43-e55f-47e9-8e68-ba99fd769f55" >
+				<until-successful maxRetries="2" doc:name="Until Successful" doc:id="015415c5-9690-4838-baa0-8a0162927ccb" millisBetweenRetries="15000">
+				<logger level="INFO" doc:name="entryDbRequestCall" doc:id="320e4a15-53d7-4b6d-a8bb-9bc10c7c46ff" message='#[["Try to Insert the data in to the database"] ++ [{"Inserting The data " : payload}]]' />
+				<http:request method="POST" doc:name="dbRequestCall" doc:id="3f6ba88f-fab8-4941-8546-8ced40892056" config-ref="database-request-call" path="/${dbcall.path}" responseTimeout="300000">
+					<http:body><![CDATA[#[vars.eachRecordVaraible]]]></http:body>
+				</http:request>
+				<logger level="INFO" doc:name="exitDbCall" doc:id="07979f1f-dd8b-40db-9364-df2603895228" message='#["Request Call is Successfully Done"]' />
+			</until-successful>
+				<error-handler ref="global-error-handlerError_Handler" />
+			</try>
+			<set-variable value='#[output application/json&#10;---&#10;vars.responses + {"dbmessage" : payload}]' doc:name="Set Variable" doc:id="746e389d-4974-48ec-959d-43d9211dfdf7" variableName="responses"/>
+			<try doc:name="Try" doc:id="8198a033-95dc-45df-94f5-3825ba5ce2fb" >
+				<until-successful maxRetries="2" doc:name="Until Successful" doc:id="44357257-3392-4505-b50c-97d1eb1553bf" millisBetweenRetries="15000">
+				<logger level="INFO" doc:name="entrySalesForceCall" doc:id="c1d87409-c513-4fff-984e-4b09faab6b53" message='#[["Calling The salesforce  and try to insert the data"] ++ ["the data trying to insert" : payload]]' />
+				<http:request method="POST" doc:name="sfRequestCall" doc:id="88e36f5e-7087-4bc5-9760-230abbfbb8f1" config-ref="salesforce-Request-call" path="/${sfcall.path}" responseTimeout="300000">
+					<http:body><![CDATA[#[vars.eachRecordVaraible]]]></http:body>
+				</http:request>
+				<logger level="INFO" doc:name="exitSalesforceCall" doc:id="c4abec95-32e4-45ff-ab99-24de8d3a484a" message='#["Data Insertion is Successfully done"]' />
+			</until-successful>
+				<error-handler ref="global-error-handlerError_Handler" />
+			</try>
+			<set-variable value='#[output application/json&#10;---&#10;vars.responses + {"sfmessage" : payload}]' doc:name="Inserting Sf Response " doc:id="2227e91e-8fc2-4897-b39f-e7aae6d86d4b" variableName="responses"/>
+			<!-- [STUDIO:"Transform Message"]<ee:transform doc:name="Transform Message" doc:id="7adcee2c-2ce4-457f-8764-311db410bf2b">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+&#45;&#45;-
+vars.responses + payload&#93;&#93;></ee:set-payload>
+			</ee:message>
+		</ee:transform> [STUDIO] -->
+			<http:request method="POST" doc:name="calling The mail" doc:id="8e2b80bb-19db-4919-bd95-18994651215b" config-ref="Mail_request_call" path="/${mail.path}">
+			<http:body><![CDATA[#[vars.responses]]]></http:body>
+		</http:request>
+		</foreach>
+		<logger level="INFO" doc:name="exitCheck" doc:id="4f4256e7-88ca-4228-b6d7-5edb45a0f8d9" message='#["Exit From the Fetching-request-datasubflow "]'/>
+	</sub-flow>
+</mule>
