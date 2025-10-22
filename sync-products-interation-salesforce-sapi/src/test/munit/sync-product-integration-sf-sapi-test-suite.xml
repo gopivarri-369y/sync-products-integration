@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="sync-product-integration-sf-sapi-test-suite.xml" />
+	<munit:test name="sync-product-integration-sf-sapi-test-suite-sync-product-integration-sf-sapi-mainTest" doc:id="6206be53-b47b-4f84-b892-96dfbc80671c" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to sync-product-integration-sf-sapi-main" doc:id="5f9bf00d-4e56-4fd1-bb5d-017a0c894b16" name="sync-product-integration-sf-sapi-main"/>
+		</munit:execution>
+	</munit:test>
+
+
+</mule>

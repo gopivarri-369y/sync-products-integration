@@ -1,0 +1,10 @@
+sf:
+  username : "pranavi.kouduru910@agentforce.com" 
+  password : "Anitha@26" 
+  securitytoken : "p1krhJiHvnqoHbrxBkjbf9Fqg"
+http : 
+  host : "0.0.0.0"
+  port : "8084"
+  
+router : 
+  api : "sync-products-integration-sf-sapi"

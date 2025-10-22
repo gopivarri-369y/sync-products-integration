@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<sub-flow name="sf-creatingdataSub_Flow" doc:id="77570921-defa-457f-949b-cc9f5584c51b" >
+		<logger level="INFO" doc:name="entryCheck" doc:id="1aca13b1-2271-4a7d-af7b-356b3b24a06d" message='#[["entered into the post: insert\sf flow"&#10;&#10;]]'/>
+		<until-successful maxRetries="2" doc:name="Until Successful" doc:id="bd918cbf-a7e4-41e6-af55-40db5f406b5d" millisBetweenRetries="10000">
+			<logger level="INFO" doc:name="callingCreate" doc:id="ba4b4673-9e1e-4417-a2a6-3f3f850c5858" message='#[["trying To insert the data",{&#10;	"data": payload&#10;}]]'/>
+			<salesforce:create type="storeproduct__c" doc:name="Create" doc:id="07697add-fad3-4027-ba37-e7f055444c39" config-ref="Salesforce_Config">
+				<salesforce:records ><![CDATA[#[%dw 2.0
+output application/json
+---
+[payload] map (
+    {
+    "id__c": $.id ,
+    "title__c" : $.title ,
+    "price__c" : $.price ,
+    "description__c" : $.description,
+    "category__c": $.category,
+    "image__c" : $.image ,
+    "ratingrate__c" : $.rating.rate ,
+    "ratingcount__c" : $.rating.count 
+
+    }
+)]]]></salesforce:records>
+			</salesforce:create>
+			<logger level="DEBUG" doc:name="responseOfCreate" doc:id="5b0ef6ca-3759-474d-a2ca-12d29e47d82e" message='#["data is successfully inserted"]' category="debug"/>
+		</until-successful>
+		<ee:transform doc:name="ResponseOfApi" doc:id="623aac04-09ae-49ae-b4fc-f701d4a4da68" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload.items.payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="exitCheck" doc:id="59712420-5485-4834-9b7d-8b2806614574" message='#["exiting from the flow post : insert\sf"]'/>
+	</sub-flow>
+</mule>

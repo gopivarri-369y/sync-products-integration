@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd">
+    <salesforce:sfdc-config name="Salesforce_Config" doc:name="Salesforce Config" doc:id="284b17c2-4d17-4b9b-bb6d-efb04101dbe1">
+        <salesforce:basic-connection username="${sf.username}" password="${sf.password}" securityToken="${sf.securitytoken}" />
+    </salesforce:sfdc-config>
+    <configuration-properties doc:name="Configuration properties" doc:id="4a52a93a-0b5a-4a72-a33b-2f5f9a685f5f" file="properties\sf-config.yaml" />
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="9b9fd97b-a221-4d63-ae99-275bf8f63275" >
+		<http:listener-connection host="${http.host}" port="${http.port}" />
+	</http:listener-config>
+	<apikit:config outboundHeadersMapName="outboundHeadersMapName" httpStatusVarName="httpStatus" doc:name="Router" doc:id="714ab58a-5443-4d70-a851-fbf5afe0cb6b" name="sync-product-integration-sf-sapi-config" api="resource::4f105f33-ac28-42d4-8771-e2e0cfeb419d:sync-product-integration-sf-sapi:1.0.1:raml:zip:sync-product-integration-sf-sapi.raml" />
+</mule>
