@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<sub-flow name="db-insertionSub_Flow" doc:id="e4e7a3fa-97ca-43c1-becc-3a77d1eccf75" >
+		<logger level="INFO" doc:name="entryCheck" doc:id="8bc11c07-b97e-494a-a9f7-0846c425eed6" message='#["Entrying into db-insert-subflow "]'/>
+		<until-successful maxRetries="2" doc:name="Until Successful" doc:id="949f2413-5f13-49e0-986b-953cd7d1ac0b" millisBetweenRetries="10000">
+			<logger level="DEBUG" doc:name="CallingDbInsert" doc:id="5f788df0-af19-4886-aafc-50bace951cc7" message='#[["Trying To insert the data",{&#10;	"data" : payload&#10;}]]' category="debug"/>
+			<db:insert doc:name="Insert" doc:id="26ec22aa-7937-4a95-8c90-aab438e2404d" config-ref="Database_Config">
+			<db:sql><![CDATA[insert into products 
+values (:id,:title,:price,:desc,:cate,:image,:ratingrate,:ratingcount)]]></db:sql>
+			<db:input-parameters><![CDATA[#[{
+	id : payload.id,
+	title : payload.title,
+	price : payload.price ,
+	desc : payload.description ,
+	cate : payload.category ,
+	image : payload.image ,
+	ratingrate :payload.rating.rate,
+	ratingcount : payload.rating.count
+}]]]></db:input-parameters>
+		</db:insert>
+			<logger level="INFO" doc:name="ResponseDb" doc:id="289b526b-64be-4a41-85b0-3779de3255f0" message='#[{&#10;	"status" : "success",&#10;	"affected" : payload.affectedRows&#10;}]'/>
+		</until-successful>
+		<ee:transform doc:name="Transform Message" doc:id="b30c2c6c-afa9-4449-a7e8-8e70e2db4af8" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"status" : "success",
+	"affected" : payload.affectedRows
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="exitCheck" doc:id="8cdda642-b2c6-4abe-8e01-fa31ce951f07" message='#["Exiting From the db-insertionsub_Flow"]'/>
+	</sub-flow>
+</mule>

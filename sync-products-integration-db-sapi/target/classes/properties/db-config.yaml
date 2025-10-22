@@ -1,0 +1,9 @@
+db : 
+    user : "neondb_owner"
+    password : "npg_kaTsfNO6ih5g"
+    driver: "org.postgresql.Driver"
+    url : "jdbc:postgresql://ep-round-sound-a7jjn2z2-pooler.ap-southeast-2.aws.neon.tech/neondb?user=neondb_owner&password=npg_kaTsfNO6ih5g&sslmode=require&channelBinding=require"
+    
+http :
+  host : "0.0.0.0"
+  port : "8083"

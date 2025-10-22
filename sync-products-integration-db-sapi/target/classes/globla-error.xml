@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<error-handler name="globla-errorError_Handler" doc:id="0e604f12-07b3-4515-8ca8-bf2b5d93d59b" >
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="cad21bbe-c63b-4ae6-ad38-1a4786986306" type="APIKIT:BAD_REQUEST" >
+			<flow-ref doc:name="Flow Reference" doc:id="d57c99ea-d2b2-452d-8d44-d790c04216d3" name="globla-errorSub_Flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate1" doc:id="9cf5efcb-cc96-4a2c-9bf8-256d86d79aad" type="APIKIT:NOT_FOUND" >
+			<flow-ref doc:name="Flow Reference" doc:id="5e5cacec-e74d-4845-b441-0aff6f7849fb" name="globla-errorSub_Flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate2" doc:id="3ac0b0f7-a052-4b60-8917-329b82458450" type="APIKIT:METHOD_NOT_ALLOWED" >
+			<flow-ref doc:name="Flow Reference" doc:id="10f753f4-21f0-47ee-ba90-b9bb8a075e37" name="globla-errorSub_Flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate3" doc:id="996ea399-3af0-41e1-a172-ff720f00f5f5" type="APIKIT:NOT_ACCEPTABLE" >
+			<flow-ref doc:name="Flow Reference" doc:id="b5409c0b-5110-477c-818b-16506ef94816" name="globla-errorSub_Flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate4" doc:id="a65ad122-b048-4bac-94aa-2e012f2d04bf" type="APIKIT:UNSUPPORTED_MEDIA_TYPE" >
+			<flow-ref doc:name="Flow Reference" doc:id="b219d4f9-21e5-4174-ac92-ed3f53c091a4" name="globla-errorSub_Flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate5" doc:id="948eb247-7106-4b4e-b245-575269aea40e" type="APIKIT:NOT_IMPLEMENTED" >
+			<flow-ref doc:name="Flow Reference" doc:id="b357226a-a6ad-4c1e-ad23-7b6ce18a44b3" name="globla-errorSub_Flow"/>
+		</on-error-propagate>
+	</error-handler>
+	<error-handler name="globla-errorError_Handler1" doc:id="62264d86-5952-4df5-b4bb-713aa3e4cbd5" >
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="f3202fa9-981b-4ffb-9395-f0fe554195da" type="DB:BAD_SQL_SYNTAX">
+			<flow-ref doc:name="Flow Reference" doc:id="91702b45-00c2-4097-bc86-27cf8f106cc6" name="globla-errorSub_Flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="75b4f7dd-1c0b-43ad-9b17-0ab4f9f3c0bd" type="DB:CONNECTIVITY">
+			<flow-ref doc:name="Flow Reference" doc:id="7953899a-e59f-4e5c-9e62-f8f460ef1b14" name="globla-errorSub_Flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="3347a338-4d8e-4dec-acae-de7fe29d2c1c" type="DB:QUERY_EXECUTION">
+			<flow-ref doc:name="Flow Reference" doc:id="a6c241d9-cef0-4d31-b75a-221fa56d01b4" name="globla-errorSub_Flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="9d391a7f-6deb-40e6-b46b-a6b3167baf49" type="DB:RETRY_EXHAUSTED">
+			<flow-ref doc:name="Flow Reference" doc:id="ae26b125-93c6-4e78-b212-c23d7f5948f1" name="globla-errorSub_Flow"/>
+		</on-error-propagate>
+	</error-handler>
+	<sub-flow name="globla-errorSub_Flow" doc:id="9178d43c-5215-4d42-ac4f-6c3eab5e439a" >
+		<ee:transform doc:name="errorResponseOfApi" doc:id="ed7b87f7-3cb1-4087-8747-4c37e4cde5d1">
+				<ee:message>
+					<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	
+	"applicationName": app.name,
+	"correlationId": vars.correlationID default correlationId,
+	"code": (error.errorType.namespace as String ++ ":" ++ error.errorType.identifier as String),
+	"description": error.description,
+	"status" : "failure",
+	"code" : 0
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+	</sub-flow>
+</mule>
