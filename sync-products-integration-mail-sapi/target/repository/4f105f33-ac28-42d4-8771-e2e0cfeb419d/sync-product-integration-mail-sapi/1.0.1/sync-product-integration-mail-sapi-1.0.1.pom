@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>4f105f33-ac28-42d4-8771-e2e0cfeb419d</groupId>
+  <artifactId>sync-product-integration-mail-sapi</artifactId>
+  <version>1.0.1</version>
+  <name>sync-product-integration-mail-sapi</name>
+  <properties>
+    <classifier>raml</classifier>
+    <main>sync-product-integration-mail-sapi.raml</main>
+    <status>published</status>
+    <originalFormatVersion>1.0</originalFormatVersion>
+    <apiVersion>v1</apiVersion>
+    <projectId>6de4bba6-149e-43b6-950c-03e7b81f383c</projectId>
+    <branchId>master</branchId>
+    <commitId>9d7042cc20db9c527460c7ee67a07dc1a5a97ddd</commitId>
+    <keywords/>
+    <type>rest-api</type>
+    <mainFile>sync-product-integration-mail-sapi.raml</mainFile>
+  </properties>
+  <repositories>
+    <repository>
+      <id>anypoint-exchange</id>
+      <url>https://maven.anypoint.mulesoft.com/api/v3/maven</url>
+    </repository>
+  </repositories>
+</project>

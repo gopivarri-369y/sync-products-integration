@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:email="http://www.mulesoft.org/schema/mule/email"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<sub-flow name="sendmailSub_Flow" doc:id="2ee96ceb-c808-4322-a983-c32ee52398d5" >
+		<logger level="INFO" doc:name="Check FLow " doc:id="f043930a-64c0-4e51-9e22-d1d9d298b8ea" message='#["entred into the sendmail subflow"]'/>
+		<email:send doc:name="Send" doc:id="46000392-1554-43ff-84d8-77f4fa6a8f8f" config-ref="Email_SMTP" fromAddress='gopivarr1@gmail.com'>
+			<email:to-addresses >
+				<email:to-address value="gopivarri5612v@gmail.com" />
+			</email:to-addresses>
+			<email:body contentType="text/plain" />
+		</email:send>
+		<ee:transform doc:name="Transform Message" doc:id="4c25e255-b92d-4e19-a190-926acd0deeb7" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+"mail is successfully send"]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="exitFLow" doc:id="3f43fe2d-904f-4d72-a8fe-4c6c1c8e068b" message='#["exiting From The main flow"]'/>
+	</sub-flow>
+</mule>

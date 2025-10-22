@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:email="http://www.mulesoft.org/schema/mule/email" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd">
+	<email:smtp-config name="Email_SMTP" doc:name="Email SMTP" doc:id="f2dc2e23-9ec1-4f51-99a6-73cbfe88f128" >
+		<email:smtp-connection host="${smtp.host}" user="${smtp.user}" password="${smtp.password}" port="${smtp.port}">
+			<email:properties >
+				<email:property key="mail.smtp.starttls.enable" value="true" />
+			</email:properties>
+		</email:smtp-connection>
+	</email:smtp-config>
+	<configuration-properties doc:name="Configuration properties" doc:id="a2baaf38-a83e-47eb-a345-1b43a9987fd9" file="properties\dev.yaml" />
+</mule>
