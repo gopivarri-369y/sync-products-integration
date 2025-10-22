@@ -1,9 +1,0 @@
-%dw 2.0
-
-type auto_9178d43c_5215_4d42_ac4f_6c3eab5e439a_Output_Payload = {|
-  applicationName: String | Null, 
-  correlationId: String, 
-  code: String, 
-  description: String | Null
-|}
-
