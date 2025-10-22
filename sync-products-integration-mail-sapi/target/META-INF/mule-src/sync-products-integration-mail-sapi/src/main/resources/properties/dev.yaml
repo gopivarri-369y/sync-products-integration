@@ -1,5 +1,0 @@
-smtp :
-  host : "smtp.gmail.com"
-  user :  "gopivarri1@gmail.com"
-  password : "guumxdpfqjooatoo"
-  port : "587"
