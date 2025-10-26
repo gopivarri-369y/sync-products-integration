@@ -1,0 +1,17 @@
+%dw 2.0
+
+type auto_d8822f96_36e5_4375_850e_c35ba5b6946d_Input_Payload = {
+  image: String, 
+  price: Number, 
+  rating: {
+    rate: Number, 
+    count: Number, 
+    _?: Any
+  }, 
+  description: String, 
+  id: Number, 
+  title: String, 
+  category: String, 
+  _?: Any
+}
+

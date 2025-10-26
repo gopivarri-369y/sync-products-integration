@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="sync-products-integration-db-sapi-suite.xml" />
+	<munit:test name="sync-products-integration-db-sapi-main-test" doc:id="1068c881-cc9b-483d-b0ec-17305938f7ad" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock APIkit Router" doc:id="362e12cc-f1ff-42d3-9590-09d7976c1efc" processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="75697608-7737-4b6c-80dd-39ee5dc46476" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://syncproductsintegrationdbsapimaintest\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeadersMapName" value="#[readUrl('classpath://syncproductsintegrationdbsapimaintest\mock_variable_.dwl')]" />
+						<munit-tools:variable key="httpStatus" value="#[readUrl('classpath://syncproductsintegrationdbsapimaintest\mock_variable_1.dwl')]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="cecf8d12-503f-4df1-ad0a-b1c50b5c023d" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://syncproductsintegrationdbsapimaintest\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://syncproductsintegrationdbsapimaintest\set-event_attributes.dwl')]" />
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to sync-products-integration-db-sapi-main" doc:id="60ad383d-8004-419e-b2c7-12fef48800ce" name="sync-products-integration-db-sapi-main"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="f7470c04-f40e-4b92-a0a3-89feafce6045" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import syncproductsintegrationdbsapimaintest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="db-insertionSub_Flow-test" doc:id="0371f2ee-cbfb-41d7-88e6-062db695455d" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Insert" doc:id="2689785a-09dc-4fb8-bf7a-f41c9a12c70f" processor="db:insert">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="26ec22aa-7937-4a95-8c90-aab438e2404d" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/java --- readUrl('classpath://dbinsertionSubFlowtest\mock_payload.dwl')]" mediaType="application/java" encoding="UTF-8" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeadersMapName" value="#[readUrl('classpath://dbinsertionSubFlowtest\mock_variable_.dwl')]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="3896536d-b498-4e1c-add7-e185de55d8a2" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://dbinsertionSubFlowtest\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://dbinsertionSubFlowtest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeadersMapName" value="#[readUrl('classpath://dbinsertionSubFlowtest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to db-insertionSub_Flow" doc:id="649570f6-0a30-499f-be8f-8922503810ee" name="post:\creatingRecorddb:application\json:sync-products-integration-db-sapi-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="e3f68b80-bb0b-41e6-a591-350e32172af6" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import dbinsertionSubFlowtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="db-updation-subflow-test" doc:id="f51f9ad8-2287-4025-8731-9fc7a6dad6f2" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Update" doc:id="a7ebe66f-0906-4aed-a17f-7ec05b1f05b5" processor="db:update">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="3e8ef766-5da4-4e49-9c10-c59e7ebab75c" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/java --- readUrl('classpath://dbupdationsubflowtest\mock_payload.dwl')]" mediaType="application/java" encoding="UTF-8" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeadersMapName" value="#[readUrl('classpath://dbupdationsubflowtest\mock_variable_.dwl')]" />
+						<munit-tools:variable key="id" value="#[output application/java --- readUrl('classpath://dbupdationsubflowtest\mock_variable_1.dwl')]" mediaType="application/java" encoding="UTF-8" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="c245fcec-3361-422d-b768-6ce5cf748499" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://dbupdationsubflowtest\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://dbupdationsubflowtest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeadersMapName" value="#[readUrl('classpath://dbupdationsubflowtest\set-event_variable_.dwl')]" />
+					<munit:variable key="id" value="#[output application/java --- readUrl('classpath://dbupdationsubflowtest\set-event_variable_1.dwl')]" encoding="UTF-8" mediaType="application/java" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to db-updation-subflow" doc:id="e880bc71-ae02-4395-ae94-25af80471285" name="put:\creatingRecorddb\(id):application\json:sync-products-integration-db-sapi-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="51fa740e-1d0f-4508-a47f-d20fab978bde" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import dbupdationsubflowtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="db-implementationsSub_Flow-test" doc:id="ac31937a-5bae-451e-968a-7de3ec89441c" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Select" doc:id="1a96a76d-2d57-40c8-8ab3-81a4ef8c2f45" processor="db:select">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="53be4c34-c984-470a-abec-b5b63033e249" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/java --- readUrl('classpath://dbimplementationsSubFlowtest\mock_payload.dwl')]" mediaType="application/java" encoding="UTF-8" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeadersMapName" value="#[readUrl('classpath://dbimplementationsSubFlowtest\mock_variable_.dwl')]" />
+						<munit-tools:variable key="id" value="#[output application/java --- readUrl('classpath://dbimplementationsSubFlowtest\mock_variable_1.dwl')]" mediaType="application/java" encoding="UTF-8" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="698534a9-fd41-432a-a495-134b7f98cc43" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://dbimplementationsSubFlowtest\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://dbimplementationsSubFlowtest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeadersMapName" value="#[readUrl('classpath://dbimplementationsSubFlowtest\set-event_variable_.dwl')]" />
+					<munit:variable key="id" value="#[output application/java --- readUrl('classpath://dbimplementationsSubFlowtest\set-event_variable_1.dwl')]" encoding="UTF-8" mediaType="application/java" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to db-implementationsSub_Flow" doc:id="2ef5d992-78e2-42c5-9aff-fb9a87241f0f" name="get:\creatingRecorddb\(id):sync-products-integration-db-sapi-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="02e702b3-c745-4878-b335-91b05331fff3" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import dbimplementationsSubFlowtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="sync-products-integration-db-sapi-main-test2" doc:id="75c0ad32-0d70-4b3d-a936-93b347bae100" expectedErrorType="APIKIT:NOT_FOUND">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock APIkit Router" doc:id="985aa4df-8200-4740-9000-a5c67de1f1d6" processor="apikit:router" >
+				
+				<munit-tools:with-attributes>
+					
+					<munit-tools:with-attribute whereValue="75697608-7737-4b6c-80dd-39ee5dc46476" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APIKIT:NOT_IMPLEMENTED" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<!-- [STUDIO:"Set Input"]<munit:set-event doc:name="Set Input" doc:id="2c5070d7-9be0-4de5-b7c4-3afe10258f16" >
+				<munit:payload value="#[output application/json &#45;&#45;- readUrl('classpath://syncproductsintegrationdbsapimaintest\set-event_payload.dwl')&#93;" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://syncproductsintegrationdbsapimaintest\set-event_attributes.dwl')&#93;" />
+			</munit:set-event> [STUDIO] -->
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to sync-products-integration-db-sapi-main" doc:id="868a9882-b622-4fc7-9b82-b1561f7fbede" name="sync-products-integration-db-sapi-main" />
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="4cca1349-2c76-47b4-9baf-f24f5e43988e" message="The payload does not match" >
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+output application/json
+---
+{
+	
+	"applicationName": app.name,
+	"correlationId": vars.correlationID default correlationId,
+	"code": (error.errorType.namespace as String ++ ":" ++ error.errorType.identifier as String),
+	"description": error.description,
+	"status" : "failure",
+	"code" : 0
+}]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>

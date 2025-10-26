@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<sub-flow name="db-insertionSub_Flow" doc:id="e4e7a3fa-97ca-43c1-becc-3a77d1eccf75" >
+		<logger level="INFO" doc:name="entryCheck" doc:id="8bc11c07-b97e-494a-a9f7-0846c425eed6" message='#["Entrying into db-insert-subflow "]'/>
+		<logger level="DEBUG" doc:name="CallingDbInsert" doc:id="5f788df0-af19-4886-aafc-50bace951cc7" message='#[["Trying To insert the data",{&#10;	"data" : payload&#10;}]]' category="debug" />
+		<db:insert doc:name="Insert" doc:id="26ec22aa-7937-4a95-8c90-aab438e2404d" config-ref="Database_Config">
+			<db:sql><![CDATA[insert into products 
+values (:id,:title,:price,:desc,:cate,:image,:ratingrate,:ratingcount)]]></db:sql>
+			<db:input-parameters><![CDATA[#[{
+	id : payload.id,
+	title : payload.title,
+	price : payload.price ,
+	desc : payload.description ,
+	cate : payload.category ,
+	image : payload.image ,
+	ratingrate :payload.rating.rate,
+	ratingcount : payload.rating.count
+}]]]></db:input-parameters>
+		</db:insert>
+		<logger level="INFO" doc:name="ResponseDb" doc:id="289b526b-64be-4a41-85b0-3779de3255f0" message='#[{&#10;	"status" : "success",&#10;	"affected" : payload.affectedRows&#10;}]' />
+		<ee:transform doc:name="Transform Message" doc:id="b30c2c6c-afa9-4449-a7e8-8e70e2db4af8" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"status" : "success",
+	"affected" : payload.affectedRows
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="exitCheck" doc:id="8cdda642-b2c6-4abe-8e01-fa31ce951f07" message='#["Exiting From the db-insertionsub_Flow"]'/>
+	</sub-flow>
+	<sub-flow name="db-updation-subflow" doc:id="a956c1a0-d11b-4c99-8010-117f396bb4a3" >
+		<logger level="INFO" doc:name="flowEntryCheck" doc:id="ffbe420c-813d-4977-8eb1-f84f301ad753" message='#["entered into the db-updation-subflow"]'/>
+		<logger level="INFO" doc:name="calling-db-update" doc:id="0224692c-b8fe-4067-919f-10a20c1ac95b" message='#["calling the data base for the updation"]'/>
+		<db:update doc:name="Update" doc:id="3e8ef766-5da4-4e49-9c10-c59e7ebab75c" config-ref="Database_Config">
+			<db:sql ><![CDATA[UPDATE products 
+SET title = :title,
+    price = :price,
+    description = :desc,
+    cate = :cate,
+    image = :image,
+    ratingrate = :ratingrate,
+    ratingcount = :ratingcount
+WHERE id = :id;
+]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{
+	id : payload.id,
+	title : payload.title,
+	price : payload.price ,
+	desc : payload.description ,
+	cate : payload.category ,
+	image : payload.image ,
+	ratingrate :payload.rating.rate,
+	ratingcount : payload.rating.count
+}]]]></db:input-parameters>
+		</db:update>
+		<logger level="INFO" doc:name="response-db-update" doc:id="ee870bf5-b033-4497-8136-f5560c3aed0c" message='#["this is the Response Comming From the database"]'/>
+		<ee:transform doc:name="response of the data update" doc:id="e63b0f96-6ff8-4941-b6a6-c0175f29b18e" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	status : if(payload.affectedRows == 1) "updated successfully" else "updation failure"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="flowExitCheck" doc:id="2812e3cc-3195-4667-ac00-29b5a23183a0" message='#["exiting From the db-updation-flow"]'/>
+	</sub-flow>
+	<sub-flow name="db-implementationsSub_Flow" doc:id="08757e45-4197-4843-b81c-876826269b31" >
+		<logger level="INFO" doc:name="entrycheck" doc:id="10d532b1-264d-4b75-9c7e-682261825d34" message='#["entering into the fetch flow with the get method"]'/>
+		<logger level="INFO" doc:name="callingDatabase" doc:id="2f193e82-a3be-49b4-84e8-89ef9a93bd30" message='#["calling the database to fetch the data for the count of the id "]'/>
+		<db:select doc:name="Select" doc:id="53be4c34-c984-470a-abec-b5b63033e249" config-ref="Database_Config" targetValue="#[output application/json&#10;---&#10;payload[0].count]">
+			<db:sql ><![CDATA[
+SELECT COUNT(*) FROM products WHERE ID = :id]]></db:sql>
+			<db:input-parameters ><![CDATA[#[%dw 2.0
+output application/json
+---
+{
+  id: (vars.id replace /"/ with "") as Number
+}]]]></db:input-parameters>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="87cb143f-7c27-400a-bb02-e509f686b2c4" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[output application/json
+---
+payload[0]]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="exitDbCall" doc:id="19a521cd-6b92-4949-a52b-244468e6aaa8" message='#["exiting From the database call"]'/>
+	</sub-flow>
+</mule>

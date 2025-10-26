@@ -1,0 +1,4 @@
+%dw 2.0
+
+type auto_d8822f96_36e5_4375_850e_c35ba5b6946d_Output_Variables_outboundHeadersMapName = Any
+

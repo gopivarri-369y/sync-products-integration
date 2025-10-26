@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>sync-product-integration-papi · Anypoint Studio Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="assets/bootstrap.css" rel="stylesheet">
+    <link href="assets/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/docs.css" rel="stylesheet">
+    <link href="assets/prettify.css" rel="stylesheet">
+    <link href="assets/scroller.css" rel="stylesheet">
+
+  </head>
+
+  <body data-twttr-rendered="true" data-spy="scroll" data-target=".bs-docs-sidebar"><iframe style="display: none;" id="rufous-sandbox" name="uid13460061790411"></iframe>
+
+    <!-- Navbar
+    ================================================== -->
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <p class="navbar-text pull-right">
+              <a href="https://www.mulesoft.com" class="navbar-link">
+                <img src="./assets/images/mulesoft-logo-final.png" alt="MuleSoft" id="mulesoftlogo">
+              </a>
+          </p>
+          <div class="scroller scroller-left"><img src="./assets/icons/glyphicons_chevron-left.png" alt="scrollLeft"></div>
+          <div class="scroller scroller-right"><img src="./assets/icons/glyphicons_chevron-right.png" alt="scrollRight"></div>
+          <div class="wrapper">
+            <ul class="nav nav-tabs list" id="myTab">
+                    <li><a href="./index.html">syc-product-integration-papi</a></li>
+                      <li><a href="./fetching-Request-data.html">fetching-Request-data</a></li>
+                      <li class="active"><a href="./global-error-handler.html">global-error-handler</a></li>
+                      <li><a href="./fetching-Request-data-test-suite.html">fetching-Request-data-test-suite</a></li>
+                      <li><a href="./global-config.html">global-config</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+  <header class="jumbotron subhead" id="overview">
+    <div class="container">
+      <h1>sync-product-integration-papi</h1>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- Docs nav
+    ================================================== -->
+    <div class="row">
+      <div class="span3 bs-docs-sidebar">
+        <ul class="nav nav-list bs-docs-sidenav affix">
+          <li class="nav-header">Flows</li>
+            <li data-toggle="collapse" data-target="#_global_error_handlerSub_FlowNav"><a href="#_global_error_handlerSub_Flow"><i class="icon-chevron-right"></i> global-error-handlerSub_Flow</a>
+            </li>
+            <div id="_global_error_handlerSub_FlowNav" class="accordion-body collapse" style="height: 0px;">
+              <div class="accordion-inner">
+                <ul>
+                </ul>
+              </div>
+            </div>
+        </ul>
+      </div>
+      <div class="span9">
+
+        <!-- Elements and their descriptions
+        ================================================== -->
+        <div style="max-height: 640px;width:100%;overflow:auto;">
+            <img src="img/global_error_handler.png" usemap="#mFlowMap" alt="Mule Configuration Image">
+            <map name="mFlowMap">
+          </map>
+        </div>
+        <!--Mule configuration xml code-->
+        <div class="accordion-heading">
+          <a class="accordion-toggle" data-toggle="collapse" href="#collapseMuleConfiguration">
+            Show Mule Configuration XML code...
+          </a>
+        </div>
+        <div id="collapseMuleConfiguration" class="accordion-body collapse" style="height: 0px;">
+          <div class="accordion-inner">
+              <pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+
+&lt;mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:email="http://www.mulesoft.org/schema/mule/email" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd"&gt;
+    &lt;error-handler name="global-error-handlerError_Handler" doc:id="f2115cab-499d-4786-91ab-44e14690cc6e"&gt; 
+        &lt;on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="6a645f5f-ac05-4069-9fba-54d4ea115548" type="APIKIT:BAD_REQUEST"&gt; 
+            &lt;flow-ref doc:name="Flow Reference" doc:id="1ddc801c-062d-4bf0-8b31-d2b595e29455" name="global-error-handlerSub_Flow"/&gt; 
+        &lt;/on-error-propagate&gt;  
+        &lt;on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate1" doc:id="4adaace7-b293-4217-8e5c-5199e1eeccbb" type="APIKIT:NOT_FOUND"&gt; 
+            &lt;flow-ref doc:name="Flow Reference" doc:id="5a33219e-9b48-4b46-99c3-853767676080" name="global-error-handlerSub_Flow"/&gt; 
+        &lt;/on-error-propagate&gt;  
+        &lt;on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate2" doc:id="efdef017-f450-462f-823a-011c8d6085f8" type="APIKIT:METHOD_NOT_ALLOWED"&gt; 
+            &lt;flow-ref doc:name="Flow Reference" doc:id="b42595b8-53ea-4d97-803b-de6c8e1c1a0b" name="global-error-handlerSub_Flow"/&gt; 
+        &lt;/on-error-propagate&gt;  
+        &lt;on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate3" doc:id="3d6487c0-3872-40a9-8989-af67730110f0" type="APIKIT:NOT_ACCEPTABLE"&gt; 
+            &lt;flow-ref doc:name="Flow Reference" doc:id="fc34cc0e-285f-4536-9cb9-b82c86c4fd4b" name="global-error-handlerSub_Flow"/&gt; 
+        &lt;/on-error-propagate&gt;  
+        &lt;on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate4" doc:id="9b5a348a-4837-419e-b489-49bff97e56dd" type="APIKIT:UNSUPPORTED_MEDIA_TYPE"&gt; 
+            &lt;flow-ref doc:name="Flow Reference" doc:id="1ba97213-6663-4c9b-b5d4-321486fcd63b" name="global-error-handlerSub_Flow"/&gt; 
+        &lt;/on-error-propagate&gt;  
+        &lt;on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate5" doc:id="b29bcabe-a06f-4adc-bb80-72ffd4b7f7e8" type="APIKIT:NOT_IMPLEMENTED"&gt; 
+            &lt;flow-ref doc:name="Flow Reference" doc:id="9b6d559a-4b32-4176-b80a-2a05421790b3" name="global-error-handlerSub_Flow"/&gt; 
+        &lt;/on-error-propagate&gt;  
+        &lt;on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="d6a6a439-ca0d-439e-9810-7e96cbf2b191" type="MULE:COMPOSITE_ROUTING"&gt; 
+            &lt;flow-ref doc:name="Flow Reference" doc:id="c8192d45-5d9c-4b38-885d-e529d3469402" name="global-error-handlerSub_Flow"/&gt; 
+        &lt;/on-error-propagate&gt;  
+        &lt;on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="bafad7bc-7afe-4530-8580-1c6be8c26071" type="MULE:EXPRESSION"&gt; 
+            &lt;flow-ref doc:name="Flow Reference" doc:id="dbc107d1-ae23-4ebf-9813-a4b750f95643" name="global-error-handlerSub_Flow"/&gt; 
+        &lt;/on-error-propagate&gt;  
+        &lt;on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="67fc16b7-9f5b-449a-9006-4314791f86c8" type="HTTP:INTERNAL_SERVER_ERROR "&gt; 
+            &lt;flow-ref doc:name="Flow Reference" doc:id="f28a0e7f-cc9f-4c41-957e-f355f1a940e4" name="global-error-handlerSub_Flow"/&gt; 
+        &lt;/on-error-propagate&gt;  
+        &lt;on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="65239d39-6c42-49af-8b80-fab4b3a77719" type="MULE:RETRY_EXHAUSTED"&gt; 
+            &lt;flow-ref doc:name="Flow Reference" doc:id="7f0a36f6-2a58-48c1-941a-a3d9ad34c323" name="global-error-handlerSub_Flow"/&gt; 
+        &lt;/on-error-continue&gt; 
+    &lt;/error-handler&gt;  
+    &lt;sub-flow name="global-error-handlerSub_Flow" doc:id="bfd7e545-3436-4b4f-817b-469821907cd7"&gt; 
+        &lt;!-- [STUDIO:"Request"] &lt;http:request method="POST" doc:name="Request" doc:id="038c4f0b-9749-4dea-b928-1f3ccb4cfef5" config-ref="Mail_request_call" path="/${mail.path}"&gt;
+            &lt;http:body &gt;&lt;![CDATA[#[%dw 2.0
+output application/json
+&amp;#45;&amp;#45;-
+{
+  "errorOrigin": p('application.name'),
+  "status" : "ERROR",
+  "message" :  error.description,
+  "description" : error.detailedDescription,
+  "timestamp": now() as DateTime,
+  "details": vars.details
+}&amp;#93;&amp;#93;&amp;#93;&gt;   &lt;/http:body&gt;
+        &lt;/http:request&gt; [STUDIO] --&gt;  
+        &lt;ee:transform doc:name="Error Response" doc:id="e60845b1-71ec-4031-8139-27ebcfe4cdb6"&gt; 
+            &lt;ee:message&gt; 
+                &lt;ee:set-payload&gt;&lt;![CDATA[%dw 2.0
+
+output application/json
+
+---
+
+{
+
+  "errorOrigin": p('application.name'),
+
+  "status" : "ERROR",
+
+  "message" :  error.description,
+
+  "description" : error.detailedDescription,
+
+  "timestamp": now() as DateTime,
+
+  "details": vars.details
+
+}]]&gt;    &lt;/ee:set-payload&gt;
+            &lt;/ee:message&gt; 
+        &lt;/ee:transform&gt; 
+    &lt;/sub-flow&gt; 
+&lt;/mule&gt;
+</code></pre>
+
+          </div>
+        </div>
+
+          <section id="_global_error_handlerSub_Flow">
+            <div class="page-header">
+                <h1>global-error-handlerSub_Flow <img src="./assets/icons/flow.png"></h1>
+            </div>
+            <div class="documentation-indented" style="height:100%;width:100%;overflow:auto;">
+                <img src="img/global_error_handlerSub_Flow.png" usemap="#flowMapglobal_error_handlerSub_Flow" alt="global_error_handlerSub_Flow image">
+                <map name="flowMapglobal_error_handlerSub_Flow">
+                </map>
+            </div>
+            <div class="documentation-indented">
+              <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" href="#_global_error_handlerSub_Flowxml_code">
+                  Show configuration XML code of the flow global-error-handlerSub_Flow...
+                </a>
+              </div>
+              <div id="_global_error_handlerSub_Flowxml_code" class="accordion-body collapse" style="height: 0px;">
+                <div class="accordion-inner">
+                    <pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+
+&lt;sub-flow name="global-error-handlerSub_Flow" doc:id="bfd7e545-3436-4b4f-817b-469821907cd7"&gt;  
+    &lt;!-- [STUDIO:"Request"] &lt;http:request method="POST" doc:name="Request" doc:id="038c4f0b-9749-4dea-b928-1f3ccb4cfef5" config-ref="Mail_request_call" path="/${mail.path}"&gt;
+            &lt;http:body &gt;&lt;![CDATA[#[%dw 2.0
+output application/json
+&amp;#45;&amp;#45;-
+{
+  "errorOrigin": p('application.name'),
+  "status" : "ERROR",
+  "message" :  error.description,
+  "description" : error.detailedDescription,
+  "timestamp": now() as DateTime,
+  "details": vars.details
+}&amp;#93;&amp;#93;&amp;#93;&gt;   &lt;/http:body&gt;
+        &lt;/http:request&gt; [STUDIO] --&gt;  
+    &lt;ee:transform doc:name="Error Response" doc:id="e60845b1-71ec-4031-8139-27ebcfe4cdb6"&gt;  
+        &lt;ee:message&gt; 
+            &lt;ee:set-payload&gt;&lt;![CDATA[%dw 2.0
+
+output application/json
+
+---
+
+{
+
+  "errorOrigin": p('application.name'),
+
+  "status" : "ERROR",
+
+  "message" :  error.description,
+
+  "description" : error.detailedDescription,
+
+  "timestamp": now() as DateTime,
+
+  "details": vars.details
+
+}]]&gt;    &lt;/ee:set-payload&gt;
+        &lt;/ee:message&gt; 
+    &lt;/ee:transform&gt; 
+&lt;/sub-flow&gt;
+</code></pre>
+
+                </div>
+              </div>
+              <p></p>
+            </div>
+          </section>
+      </div>
+    </div>
+  </div>
+
+<!-- Footer
+    ================================================== -->
+    <footer class="footer">
+      <div class="container">
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>Designed and built with <a href="https://www.mulesoft.com/platform/studio" target="_blank">Anypoint Studio</a>.</p>
+        <p>Code licensed under the <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache License v2.0</a>. Documentation licensed under <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
+        <p>Icons from <a href="https://glyphicons.com/">Glyphicons Free</a>, licensed under <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
+        <ul class="footer-links">
+          <li><a href="https://blogs.mulesoft.com/bloghome/">Read the blog</a></li>
+          <li><a href="https://www.mulesoft.org/jira/issues/">Submit issues</a></li>
+        </ul>
+      </div>
+    </footer>
+
+
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="assets/widgets.js"></script>
+    <script src="assets/jquery.js"></script>
+    <script src="assets/prettify.js"></script>
+    <script src="assets/bootstrap-transition.js"></script>
+    <script src="assets/bootstrap-alert.js"></script>
+    <script src="assets/bootstrap-modal.js"></script>
+    <script src="assets/bootstrap-dropdown.js"></script>
+    <script src="assets/bootstrap-scrollspy.js"></script>
+    <script src="assets/bootstrap-tab.js"></script>
+    <script src="assets/bootstrap-tooltip.js"></script>
+    <script src="assets/bootstrap-popover.js"></script>
+    <script src="assets/bootstrap-button.js"></script>
+    <script src="assets/bootstrap-collapse.js"></script>
+    <script src="assets/bootstrap-carousel.js"></script>
+    <script src="assets/bootstrap-typeahead.js"></script>
+    <script src="assets/bootstrap-affix.js"></script>
+    <script src="assets/scroller.js"></script>
+    <script src="assets/application.js"></script>
+
+</body>
+</html>

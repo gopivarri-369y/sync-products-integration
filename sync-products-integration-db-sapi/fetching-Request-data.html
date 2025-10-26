@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>sync-product-integration-papi · Anypoint Studio Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="assets/bootstrap.css" rel="stylesheet">
+    <link href="assets/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/docs.css" rel="stylesheet">
+    <link href="assets/prettify.css" rel="stylesheet">
+    <link href="assets/scroller.css" rel="stylesheet">
+
+  </head>
+
+  <body data-twttr-rendered="true" data-spy="scroll" data-target=".bs-docs-sidebar"><iframe style="display: none;" id="rufous-sandbox" name="uid13460061790411"></iframe>
+
+    <!-- Navbar
+    ================================================== -->
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <p class="navbar-text pull-right">
+              <a href="https://www.mulesoft.com" class="navbar-link">
+                <img src="./assets/images/mulesoft-logo-final.png" alt="MuleSoft" id="mulesoftlogo">
+              </a>
+          </p>
+          <div class="scroller scroller-left"><img src="./assets/icons/glyphicons_chevron-left.png" alt="scrollLeft"></div>
+          <div class="scroller scroller-right"><img src="./assets/icons/glyphicons_chevron-right.png" alt="scrollRight"></div>
+          <div class="wrapper">
+            <ul class="nav nav-tabs list" id="myTab">
+                    <li><a href="./index.html">syc-product-integration-papi</a></li>
+                      <li class="active"><a href="./fetching-Request-data.html">fetching-Request-data</a></li>
+                      <li><a href="./global-error-handler.html">global-error-handler</a></li>
+                      <li><a href="./fetching-Request-data-test-suite.html">fetching-Request-data-test-suite</a></li>
+                      <li><a href="./global-config.html">global-config</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+  <header class="jumbotron subhead" id="overview">
+    <div class="container">
+      <h1>sync-product-integration-papi</h1>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- Docs nav
+    ================================================== -->
+    <div class="row">
+      <div class="span3 bs-docs-sidebar">
+        <ul class="nav nav-list bs-docs-sidenav affix">
+          <li class="nav-header">Flows</li>
+            <li data-toggle="collapse" data-target="#_fetching_Request_dataSub_FlowNav"><a href="#_fetching_Request_dataSub_Flow"><i class="icon-chevron-right"></i> fetching-Request-dataSub_Flow</a>
+            </li>
+            <div id="_fetching_Request_dataSub_FlowNav" class="accordion-body collapse" style="height: 0px;">
+              <div class="accordion-inner">
+                <ul>
+                </ul>
+              </div>
+            </div>
+            <li data-toggle="collapse" data-target="#_calling_sf_subflowNav"><a href="#_calling_sf_subflow"><i class="icon-chevron-right"></i> calling-sf-subflow</a>
+            </li>
+            <div id="_calling_sf_subflowNav" class="accordion-body collapse" style="height: 0px;">
+              <div class="accordion-inner">
+                <ul>
+                </ul>
+              </div>
+            </div>
+            <li data-toggle="collapse" data-target="#_inserting_Data_into_Db_subFlowNav"><a href="#_inserting_Data_into_Db_subFlow"><i class="icon-chevron-right"></i> inserting-Data-into-Db-subFlow</a>
+            </li>
+            <div id="_inserting_Data_into_Db_subFlowNav" class="accordion-body collapse" style="height: 0px;">
+              <div class="accordion-inner">
+                <ul>
+                </ul>
+              </div>
+            </div>
+            <li data-toggle="collapse" data-target="#_updating_data_in_DB_subflowNav"><a href="#_updating_data_in_DB_subflow"><i class="icon-chevron-right"></i> updating-data-in-DB-subflow</a>
+            </li>
+            <div id="_updating_data_in_DB_subflowNav" class="accordion-body collapse" style="height: 0px;">
+              <div class="accordion-inner">
+                <ul>
+                </ul>
+              </div>
+            </div>
+            <li data-toggle="collapse" data-target="#_checkingTheExistingDataFlowNav"><a href="#_checkingTheExistingDataFlow"><i class="icon-chevron-right"></i> checkingTheExistingDataFlow</a>
+            </li>
+            <div id="_checkingTheExistingDataFlowNav" class="accordion-body collapse" style="height: 0px;">
+              <div class="accordion-inner">
+                <ul>
+                </ul>
+              </div>
+            </div>
+        </ul>
+      </div>
+      <div class="span9">
+
+        <!-- Elements and their descriptions
+        ================================================== -->
+        <div style="max-height: 640px;width:100%;overflow:auto;">
+            <img src="img/fetching_Request_data.png" usemap="#mFlowMap" alt="Mule Configuration Image">
+            <map name="mFlowMap">
+          </map>
+        </div>
+        <!--Mule configuration xml code-->
+        <div class="accordion-heading">
+          <a class="accordion-toggle" data-toggle="collapse" href="#collapseMuleConfiguration">
+            Show Mule Configuration XML code...
+          </a>
+        </div>
+        <div id="collapseMuleConfiguration" class="accordion-body collapse" style="height: 0px;">
+          <div class="accordion-inner">
+              <pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+
+&lt;mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:email="http://www.mulesoft.org/schema/mule/email" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd"&gt;
+    &lt;sub-flow name="fetching-Request-dataSub_Flow" doc:id="c4809607-77f0-4e4c-bf97-43b0aa863d2a"&gt; 
+        &lt;logger level="INFO" doc:name="entryCheck" doc:id="3c588805-d60e-42d5-bfb2-fe6fa61edf51" message="#[&amp;quot;Entered into the fetchReaquest Flow&amp;quot;]"/&gt;  
+        &lt;until-successful maxRetries="3" doc:name="Until Successful" doc:id="a6a8f9c9-3d78-4d2d-9af2-21a8d53a7e0d" millisBetweenRetries="6000"&gt; 
+            &lt;logger level="INFO" doc:name="requestEntry" doc:id="25ad2286-b64c-438c-a814-417706e25e17" message="#[&amp;quot;entrying Into The products Request&amp;quot;]"/&gt;  
+            &lt;http:request method="GET" doc:name="fetchingTheFakestoreapi" doc:id="16a29d70-2298-4ab4-99bf-cd7c98a59f5b" config-ref="products_request_config" path="/${request.path}"/&gt;  
+            &lt;logger level="INFO" doc:name="requestExit" doc:id="82c4e797-a165-48bc-937e-70fbc7557d17" message="#[&amp;quot;Exiting From the products Request&amp;quot;]"/&gt; 
+        &lt;/until-successful&gt;  
+        &lt;ee:transform doc:name="validating the data" doc:id="bc68a5ba-44d7-4c63-8b44-809c3eaed5a3"&gt; 
+            &lt;ee:message&gt;    &lt;/ee:message&gt;  
+            &lt;ee:variables&gt; 
+                &lt;ee:set-variable resource="dwl/validation.dwl" variableName="validation"/&gt; 
+            &lt;/ee:variables&gt; 
+        &lt;/ee:transform&gt;  
+        &lt;ee:transform doc:name="variableDeclaations" doc:id="24a6a1e4-b34e-4c36-812e-f36070c014ba"&gt; 
+            &lt;ee:message&gt;    &lt;/ee:message&gt;  
+            &lt;ee:variables&gt; 
+                &lt;ee:set-variable variableName="processData"&gt;&lt;![CDATA[%dw 2.0
+
+output application/json
+
+---
+
+[]]]&gt;   &lt;/ee:set-variable&gt;
+                &lt;ee:set-variable variableName="unprocesseddata"&gt;&lt;![CDATA[%dw 2.0
+
+output application/java
+
+---
+
+{
+
+}]]&gt;    &lt;/ee:set-variable&gt;
+            &lt;/ee:variables&gt; 
+        &lt;/ee:transform&gt;  
+        &lt;foreach doc:name="For Each" doc:id="3cc0ce18-68f7-4f62-a595-754295941790" collection="#[vars.validation.validData]"&gt; 
+            &lt;try doc:name="Try" doc:id="c161423f-d73e-4ad3-986e-2d5c013f2e5c"&gt; 
+                &lt;flow-ref doc:name="refering The checking " doc:id="c88872c8-7cd0-4de2-a0a8-c0b8a914349c" name="checkingTheExistingDataFlow"/&gt;  
+                &lt;ee:transform doc:name="processDataVariable" doc:id="4e3e8142-ab80-4298-8ba1-f7e5a7009d88"&gt; 
+                    &lt;ee:message&gt;    &lt;/ee:message&gt;  
+                    &lt;ee:variables&gt; 
+                        &lt;ee:set-variable variableName="processData"&gt;&lt;![CDATA[%dw 2.0
+
+output application/json
+
+---
+
+vars.processData + {
+
+    id : vars.eachRecordVaraible.id,
+
+    response : {
+
+    databasemessage : vars.responses.dbmessage.status[0],
+
+    salesforcemessage : {
+
+        id : salesforceid : vars.responses.sfmessage.response.id[0],
+
+        operation : if(vars.responses.sfmessage.response.created[0] == false) "perform the updating operation" else "performing the create operation",
+
+        status : if(vars.responses.sfmessage.response.success[0] == true) "success" else "failure",
+
+        error : vars.responses.sfmessage.response.errors[0]
+
+
+
+    }
+
+}
+
+}]]&gt;    &lt;/ee:set-variable&gt;
+                    &lt;/ee:variables&gt; 
+                &lt;/ee:transform&gt;  
+                &lt;error-handler&gt; 
+                    &lt;on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="136571cc-f38d-43c9-abed-7ca4c854b3fe" type="ANY"&gt; 
+                        &lt;logger level="INFO" doc:name="Logger" doc:id="48f49b27-09ef-4d74-8909-753588ac7164" message="#[payload]"/&gt; 
+                    &lt;/on-error-continue&gt; 
+                &lt;/error-handler&gt; 
+            &lt;/try&gt; 
+        &lt;/foreach&gt;  
+        &lt;http:request method="POST" doc:name="calling The mail" doc:id="8e2b80bb-19db-4919-bd95-18994651215b" config-ref="Mail_request_call" path="/${mail.path}" responseTimeout="150000"&gt; 
+            &lt;http:body&gt;&lt;![CDATA[#[vars.processData]]]&gt;  &lt;/http:body&gt; 
+        &lt;/http:request&gt;  
+        &lt;ee:transform doc:name="final Response" doc:id="23fdafa1-2118-4564-a0ce-0d28b0c074bc"&gt; 
+            &lt;ee:message&gt; 
+                &lt;ee:set-payload&gt;&lt;![CDATA[%dw 2.0
+
+output application/json
+
+---
+
+{
+
+    "message" : "check your mail for the id"
+
+}]]&gt;    &lt;/ee:set-payload&gt;
+            &lt;/ee:message&gt; 
+        &lt;/ee:transform&gt;  
+        &lt;logger level="INFO" doc:name="exitCheck" doc:id="4f4256e7-88ca-4228-b6d7-5edb45a0f8d9" message="#[&amp;quot;Exit From the Fetching-request-datasubflow &amp;quot;]"/&gt; 
+    &lt;/sub-flow&gt;  
+    &lt;sub-flow name="calling-sf-subflow" doc:id="d60c48ad-c51b-4c74-bbe2-f879727896a6"&gt; 
+        &lt;until-successful maxRetries="2" doc:name="Until Successful" doc:id="44357257-3392-4505-b50c-97d1eb1553bf" millisBetweenRetries="15000"&gt; 
+            &lt;logger level="INFO" doc:name="entrySalesForceCall" doc:id="c1d87409-c513-4fff-984e-4b09faab6b53" message="#[[&amp;quot;Calling The salesforce  and try to insert the data&amp;quot;] ++ [&amp;quot;the data trying to insert&amp;quot; : payload]]"/&gt;  
+            &lt;http:request method="POST" doc:name="sfRequestCall" doc:id="88e36f5e-7087-4bc5-9760-230abbfbb8f1" config-ref="salesforce-Request-call" path="/${sfcall.path}" responseTimeout="300000"&gt; 
+                &lt;http:body&gt;&lt;![CDATA[#[vars.eachRecordVaraible]]]&gt;   &lt;/http:body&gt; 
+            &lt;/http:request&gt;  
+            &lt;logger level="INFO" doc:name="exitSalesforceCall" doc:id="c4abec95-32e4-45ff-ab99-24de8d3a484a" message="#[&amp;quot;Data Insertion is Successfully done&amp;quot;]"/&gt; 
+        &lt;/until-successful&gt;  
+        &lt;set-variable value="#[output application/json
+---
+vars.responses + {&amp;quot;sfmessage&amp;quot; : payload}]" doc:name="Inserting Sf Response " doc:id="2227e91e-8fc2-4897-b39f-e7aae6d86d4b" variableName="responses"/&gt;
+    &lt;/sub-flow&gt;  
+    &lt;sub-flow name="inserting-Data-into-Db-subFlow" doc:id="603b3034-fa00-44f5-9579-c82ddb55d7c2"&gt; 
+        &lt;until-successful maxRetries="2" doc:name="Until Successful" doc:id="015415c5-9690-4838-baa0-8a0162927ccb" millisBetweenRetries="15000"&gt; 
+            &lt;logger level="INFO" doc:name="entryDbRequestCall" doc:id="320e4a15-53d7-4b6d-a8bb-9bc10c7c46ff" message="#[[&amp;quot;Try to Insert the data in to the database&amp;quot;] ++ [{&amp;quot;Inserting The data &amp;quot; : payload}]]"/&gt;  
+            &lt;http:request method="POST" doc:name="dbCallOfInsertion" doc:id="3f6ba88f-fab8-4941-8546-8ced40892056" config-ref="database-request-call" path="/${dbcall.path}" responseTimeout="300000"&gt; 
+                &lt;http:body&gt;&lt;![CDATA[#[vars.eachRecordVaraible]]]&gt;   &lt;/http:body&gt; 
+            &lt;/http:request&gt;  
+            &lt;logger level="INFO" doc:name="exitDbCall" doc:id="07979f1f-dd8b-40db-9364-df2603895228" message="#[&amp;quot;Request Call is Successfully Done&amp;quot;]"/&gt; 
+        &lt;/until-successful&gt; 
+    &lt;/sub-flow&gt;  
+    &lt;sub-flow name="updating-data-in-DB-subflow" doc:id="78376fef-2e77-496d-8d50-37ddf0b68dc3"&gt; 
+        &lt;logger level="INFO" doc:name="callingDbUpdation" doc:id="f5478a96-2f46-4d78-8ead-8d5d0204f33a"/&gt;  
+        &lt;http:request method="PUT" doc:name="callingDbUpdation" doc:id="acdef95d-8096-4940-a355-735edb553f70" config-ref="database-request-call" path="/${dbcall.path}/{id}" responseTimeout="300000"&gt; 
+            &lt;http:body&gt;&lt;![CDATA[#[vars.eachRecordVaraible]]]&gt;   &lt;/http:body&gt;  
+            &lt;http:uri-params&gt;&lt;![CDATA[#[output application/java
+
+---
+
+{
+
+    "id" : vars.eachRecordVaraible.id
+
+}]]]&gt;   &lt;/http:uri-params&gt;
+        &lt;/http:request&gt;  
+        &lt;logger level="INFO" doc:name="response Of Db updation" doc:id="a8d3fdd8-0310-4a9a-bc38-a06f8583dcdb"/&gt; 
+    &lt;/sub-flow&gt;  
+    &lt;sub-flow name="checkingTheExistingDataFlow" doc:id="c9dcdde2-4468-415f-9341-7e60027345cc"&gt; 
+        &lt;set-variable value="#[output application/json
+---
+[]]" doc:name="responses Variable" doc:id="53c063c1-ef67-4efd-b413-8d2d8c5a2c67" variableName="responses"/&gt;
+        &lt;ee:transform doc:name="eachRecordVaraible" doc:id="4bc44593-1174-4e03-9374-ed5c53e3c57b"&gt; 
+            &lt;ee:message&gt;    &lt;/ee:message&gt;  
+            &lt;ee:variables&gt; 
+                &lt;ee:set-variable variableName="eachRecordVaraible"&gt;&lt;![CDATA[%dw 2.0
+
+output application/json
+
+---
+
+payload]]&gt;  &lt;/ee:set-variable&gt;
+            &lt;/ee:variables&gt; 
+        &lt;/ee:transform&gt;  
+        &lt;http:request method="GET" doc:name="calling-db-select" doc:id="45ed5b59-344a-4e12-8735-1e9c200d13a8" config-ref="database-request-call" path="/${dbcall.path}/{id}" responseTimeout="200000"&gt; 
+            &lt;http:uri-params&gt;&lt;![CDATA[#[output application/java
+
+---
+
+{
+
+    "id" : vars.eachRecordVaraible.id
+
+}]]]&gt;   &lt;/http:uri-params&gt;
+        &lt;/http:request&gt;  
+        &lt;choice doc:name="Choice" doc:id="a7030bc3-3d92-422d-88f2-e59f0c061e5a"&gt; 
+            &lt;when expression="#[payload.count &amp;gt; 0]"&gt; 
+                &lt;flow-ref doc:name="Flow Reference" doc:id="1177e952-c80c-48d7-ba98-85e40e992f5b" name="updating-data-in-DB-subflow"/&gt; 
+            &lt;/when&gt;  
+            &lt;otherwise&gt; 
+                &lt;flow-ref doc:name="Flow Reference" doc:id="778d1377-0336-4407-8bda-d56facb3a4a2" name="inserting-Data-into-Db-subFlow"/&gt; 
+            &lt;/otherwise&gt; 
+        &lt;/choice&gt;  
+        &lt;set-variable value="#[output application/json
+---
+vars.responses + {&amp;quot;dbmessage&amp;quot; : payload}]" doc:name="Set Variable" doc:id="746e389d-4974-48ec-959d-43d9211dfdf7" variableName="responses"/&gt;
+        &lt;flow-ref doc:name="Flow Reference" doc:id="7e6bc382-eceb-45a8-b91f-1528153ebca4" name="calling-sf-subflow"/&gt; 
+    &lt;/sub-flow&gt; 
+&lt;/mule&gt;
+</code></pre>
+
+          </div>
+        </div>
+
+          <section id="_fetching_Request_dataSub_Flow">
+            <div class="page-header">
+                <h1>fetching-Request-dataSub_Flow <img src="./assets/icons/flow.png"></h1>
+            </div>
+            <div class="documentation-indented" style="height:100%;width:100%;overflow:auto;">
+                <img src="img/fetching_Request_dataSub_Flow.png" usemap="#flowMapfetching_Request_dataSub_Flow" alt="fetching_Request_dataSub_Flow image">
+                <map name="flowMapfetching_Request_dataSub_Flow">
+                </map>
+            </div>
+            <div class="documentation-indented">
+              <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" href="#_fetching_Request_dataSub_Flowxml_code">
+                  Show configuration XML code of the flow fetching-Request-dataSub_Flow...
+                </a>
+              </div>
+              <div id="_fetching_Request_dataSub_Flowxml_code" class="accordion-body collapse" style="height: 0px;">
+                <div class="accordion-inner">
+                    <pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+
+&lt;sub-flow name="fetching-Request-dataSub_Flow" doc:id="c4809607-77f0-4e4c-bf97-43b0aa863d2a"&gt;  
+    &lt;logger level="INFO" doc:name="entryCheck" doc:id="3c588805-d60e-42d5-bfb2-fe6fa61edf51" message="#[&amp;quot;Entered into the fetchReaquest Flow&amp;quot;]"/&gt;  
+    &lt;until-successful maxRetries="3" doc:name="Until Successful" doc:id="a6a8f9c9-3d78-4d2d-9af2-21a8d53a7e0d" millisBetweenRetries="6000"&gt; 
+        &lt;logger level="INFO" doc:name="requestEntry" doc:id="25ad2286-b64c-438c-a814-417706e25e17" message="#[&amp;quot;entrying Into The products Request&amp;quot;]"/&gt;  
+        &lt;http:request method="GET" doc:name="fetchingTheFakestoreapi" doc:id="16a29d70-2298-4ab4-99bf-cd7c98a59f5b" config-ref="products_request_config" path="/${request.path}"&gt;   &lt;/http:request&gt;  
+        &lt;logger level="INFO" doc:name="requestExit" doc:id="82c4e797-a165-48bc-937e-70fbc7557d17" message="#[&amp;quot;Exiting From the products Request&amp;quot;]"/&gt; 
+    &lt;/until-successful&gt;  
+    &lt;ee:transform doc:name="validating the data" doc:id="bc68a5ba-44d7-4c63-8b44-809c3eaed5a3"&gt;  
+        &lt;ee:message&gt;    &lt;/ee:message&gt;  
+        &lt;ee:variables&gt; 
+            &lt;ee:set-variable resource="dwl/validation.dwl" variableName="validation"/&gt; 
+        &lt;/ee:variables&gt; 
+    &lt;/ee:transform&gt;  
+    &lt;ee:transform doc:name="variableDeclaations" doc:id="24a6a1e4-b34e-4c36-812e-f36070c014ba"&gt;  
+        &lt;ee:message&gt;    &lt;/ee:message&gt;  
+        &lt;ee:variables&gt; 
+            &lt;ee:set-variable variableName="processData"&gt;&lt;![CDATA[%dw 2.0
+
+output application/json
+
+---
+
+[]]]&gt;   &lt;/ee:set-variable&gt;
+            &lt;ee:set-variable variableName="unprocesseddata"&gt;&lt;![CDATA[%dw 2.0
+
+output application/java
+
+---
+
+{
+
+}]]&gt;    &lt;/ee:set-variable&gt;
+        &lt;/ee:variables&gt; 
+    &lt;/ee:transform&gt;  
+    &lt;foreach doc:name="For Each" doc:id="3cc0ce18-68f7-4f62-a595-754295941790" collection="#[vars.validation.validData]"&gt; 
+        &lt;try doc:name="Try" doc:id="c161423f-d73e-4ad3-986e-2d5c013f2e5c"&gt; 
+            &lt;flow-ref doc:name="refering The checking " doc:id="c88872c8-7cd0-4de2-a0a8-c0b8a914349c" name="checkingTheExistingDataFlow"/&gt;  
+            &lt;ee:transform doc:name="processDataVariable" doc:id="4e3e8142-ab80-4298-8ba1-f7e5a7009d88"&gt;  
+                &lt;ee:message&gt;    &lt;/ee:message&gt;  
+                &lt;ee:variables&gt; 
+                    &lt;ee:set-variable variableName="processData"&gt;&lt;![CDATA[%dw 2.0
+
+output application/json
+
+---
+
+vars.processData + {
+
+    id : vars.eachRecordVaraible.id,
+
+    response : {
+
+    databasemessage : vars.responses.dbmessage.status[0],
+
+    salesforcemessage : {
+
+        id : salesforceid : vars.responses.sfmessage.response.id[0],
+
+        operation : if(vars.responses.sfmessage.response.created[0] == false) "perform the updating operation" else "performing the create operation",
+
+        status : if(vars.responses.sfmessage.response.success[0] == true) "success" else "failure",
+
+        error : vars.responses.sfmessage.response.errors[0]
+
+
+
+    }
+
+}
+
+}]]&gt;    &lt;/ee:set-variable&gt;
+                &lt;/ee:variables&gt; 
+            &lt;/ee:transform&gt;  
+            &lt;error-handler&gt; 
+                &lt;on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="136571cc-f38d-43c9-abed-7ca4c854b3fe" type="ANY"&gt; 
+                    &lt;logger level="INFO" doc:name="Logger" doc:id="48f49b27-09ef-4d74-8909-753588ac7164" message="#[payload]"/&gt; 
+                &lt;/on-error-continue&gt; 
+            &lt;/error-handler&gt; 
+        &lt;/try&gt; 
+    &lt;/foreach&gt;  
+    &lt;http:request method="POST" doc:name="calling The mail" doc:id="8e2b80bb-19db-4919-bd95-18994651215b" config-ref="Mail_request_call" path="/${mail.path}" responseTimeout="150000"&gt;  
+        &lt;http:body&gt;&lt;![CDATA[#[vars.processData]]]&gt;  &lt;/http:body&gt; 
+    &lt;/http:request&gt;  
+    &lt;ee:transform doc:name="final Response" doc:id="23fdafa1-2118-4564-a0ce-0d28b0c074bc"&gt;  
+        &lt;ee:message&gt; 
+            &lt;ee:set-payload&gt;&lt;![CDATA[%dw 2.0
+
+output application/json
+
+---
+
+{
+
+    "message" : "check your mail for the id"
+
+}]]&gt;    &lt;/ee:set-payload&gt;
+        &lt;/ee:message&gt; 
+    &lt;/ee:transform&gt;  
+    &lt;logger level="INFO" doc:name="exitCheck" doc:id="4f4256e7-88ca-4228-b6d7-5edb45a0f8d9" message="#[&amp;quot;Exit From the Fetching-request-datasubflow &amp;quot;]"/&gt; 
+&lt;/sub-flow&gt;
+</code></pre>
+
+                </div>
+              </div>
+              <p></p>
+            </div>
+          </section>
+          <section id="_calling_sf_subflow">
+            <div class="page-header">
+                <h1>calling-sf-subflow <img src="./assets/icons/flow.png"></h1>
+            </div>
+            <div class="documentation-indented" style="height:100%;width:100%;overflow:auto;">
+                <img src="img/calling_sf_subflow.png" usemap="#flowMapcalling_sf_subflow" alt="calling_sf_subflow image">
+                <map name="flowMapcalling_sf_subflow">
+                </map>
+            </div>
+            <div class="documentation-indented">
+              <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" href="#_calling_sf_subflowxml_code">
+                  Show configuration XML code of the flow calling-sf-subflow...
+                </a>
+              </div>
+              <div id="_calling_sf_subflowxml_code" class="accordion-body collapse" style="height: 0px;">
+                <div class="accordion-inner">
+                    <pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+
+&lt;sub-flow name="calling-sf-subflow" doc:id="d60c48ad-c51b-4c74-bbe2-f879727896a6"&gt;  
+    &lt;until-successful maxRetries="2" doc:name="Until Successful" doc:id="44357257-3392-4505-b50c-97d1eb1553bf" millisBetweenRetries="15000"&gt; 
+        &lt;logger level="INFO" doc:name="entrySalesForceCall" doc:id="c1d87409-c513-4fff-984e-4b09faab6b53" message="#[[&amp;quot;Calling The salesforce  and try to insert the data&amp;quot;] ++ [&amp;quot;the data trying to insert&amp;quot; : payload]]"/&gt;  
+        &lt;http:request method="POST" doc:name="sfRequestCall" doc:id="88e36f5e-7087-4bc5-9760-230abbfbb8f1" config-ref="salesforce-Request-call" path="/${sfcall.path}" responseTimeout="300000"&gt;  
+            &lt;http:body&gt;&lt;![CDATA[#[vars.eachRecordVaraible]]]&gt;   &lt;/http:body&gt; 
+        &lt;/http:request&gt;  
+        &lt;logger level="INFO" doc:name="exitSalesforceCall" doc:id="c4abec95-32e4-45ff-ab99-24de8d3a484a" message="#[&amp;quot;Data Insertion is Successfully done&amp;quot;]"/&gt; 
+    &lt;/until-successful&gt;  
+    &lt;set-variable value="#[output application/json
+---
+vars.responses + {&amp;quot;sfmessage&amp;quot; : payload}]" doc:name="Inserting Sf Response " doc:id="2227e91e-8fc2-4897-b39f-e7aae6d86d4b" variableName="responses"/&gt;
+&lt;/sub-flow&gt;
+</code></pre>
+
+                </div>
+              </div>
+              <p></p>
+            </div>
+          </section>
+          <section id="_inserting_Data_into_Db_subFlow">
+            <div class="page-header">
+                <h1>inserting-Data-into-Db-subFlow <img src="./assets/icons/flow.png"></h1>
+            </div>
+            <div class="documentation-indented" style="height:100%;width:100%;overflow:auto;">
+                <img src="img/inserting_Data_into_Db_subFlow.png" usemap="#flowMapinserting_Data_into_Db_subFlow" alt="inserting_Data_into_Db_subFlow image">
+                <map name="flowMapinserting_Data_into_Db_subFlow">
+                </map>
+            </div>
+            <div class="documentation-indented">
+              <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" href="#_inserting_Data_into_Db_subFlowxml_code">
+                  Show configuration XML code of the flow inserting-Data-into-Db-subFlow...
+                </a>
+              </div>
+              <div id="_inserting_Data_into_Db_subFlowxml_code" class="accordion-body collapse" style="height: 0px;">
+                <div class="accordion-inner">
+                    <pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+
+&lt;sub-flow name="inserting-Data-into-Db-subFlow" doc:id="603b3034-fa00-44f5-9579-c82ddb55d7c2"&gt;  
+    &lt;until-successful maxRetries="2" doc:name="Until Successful" doc:id="015415c5-9690-4838-baa0-8a0162927ccb" millisBetweenRetries="15000"&gt; 
+        &lt;logger level="INFO" doc:name="entryDbRequestCall" doc:id="320e4a15-53d7-4b6d-a8bb-9bc10c7c46ff" message="#[[&amp;quot;Try to Insert the data in to the database&amp;quot;] ++ [{&amp;quot;Inserting The data &amp;quot; : payload}]]"/&gt;  
+        &lt;http:request method="POST" doc:name="dbCallOfInsertion" doc:id="3f6ba88f-fab8-4941-8546-8ced40892056" config-ref="database-request-call" path="/${dbcall.path}" responseTimeout="300000"&gt;  
+            &lt;http:body&gt;&lt;![CDATA[#[vars.eachRecordVaraible]]]&gt;   &lt;/http:body&gt; 
+        &lt;/http:request&gt;  
+        &lt;logger level="INFO" doc:name="exitDbCall" doc:id="07979f1f-dd8b-40db-9364-df2603895228" message="#[&amp;quot;Request Call is Successfully Done&amp;quot;]"/&gt; 
+    &lt;/until-successful&gt; 
+&lt;/sub-flow&gt;
+</code></pre>
+
+                </div>
+              </div>
+              <p></p>
+            </div>
+          </section>
+          <section id="_updating_data_in_DB_subflow">
+            <div class="page-header">
+                <h1>updating-data-in-DB-subflow <img src="./assets/icons/flow.png"></h1>
+            </div>
+            <div class="documentation-indented" style="height:100%;width:100%;overflow:auto;">
+                <img src="img/updating_data_in_DB_subflow.png" usemap="#flowMapupdating_data_in_DB_subflow" alt="updating_data_in_DB_subflow image">
+                <map name="flowMapupdating_data_in_DB_subflow">
+                </map>
+            </div>
+            <div class="documentation-indented">
+              <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" href="#_updating_data_in_DB_subflowxml_code">
+                  Show configuration XML code of the flow updating-data-in-DB-subflow...
+                </a>
+              </div>
+              <div id="_updating_data_in_DB_subflowxml_code" class="accordion-body collapse" style="height: 0px;">
+                <div class="accordion-inner">
+                    <pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+
+&lt;sub-flow name="updating-data-in-DB-subflow" doc:id="78376fef-2e77-496d-8d50-37ddf0b68dc3"&gt;  
+    &lt;logger level="INFO" doc:name="callingDbUpdation" doc:id="f5478a96-2f46-4d78-8ead-8d5d0204f33a"/&gt;  
+    &lt;http:request method="PUT" doc:name="callingDbUpdation" doc:id="acdef95d-8096-4940-a355-735edb553f70" config-ref="database-request-call" path="/${dbcall.path}/{id}" responseTimeout="300000"&gt;  
+        &lt;http:body&gt;&lt;![CDATA[#[vars.eachRecordVaraible]]]&gt;   &lt;/http:body&gt;  
+        &lt;http:uri-params&gt;&lt;![CDATA[#[output application/java
+
+---
+
+{
+
+    "id" : vars.eachRecordVaraible.id
+
+}]]]&gt;   &lt;/http:uri-params&gt;
+    &lt;/http:request&gt;  
+    &lt;logger level="INFO" doc:name="response Of Db updation" doc:id="a8d3fdd8-0310-4a9a-bc38-a06f8583dcdb"/&gt; 
+&lt;/sub-flow&gt;
+</code></pre>
+
+                </div>
+              </div>
+              <p></p>
+            </div>
+          </section>
+          <section id="_checkingTheExistingDataFlow">
+            <div class="page-header">
+                <h1>checkingTheExistingDataFlow <img src="./assets/icons/flow.png"></h1>
+            </div>
+            <div class="documentation-indented" style="height:100%;width:100%;overflow:auto;">
+                <img src="img/checkingTheExistingDataFlow.png" usemap="#flowMapcheckingTheExistingDataFlow" alt="checkingTheExistingDataFlow image">
+                <map name="flowMapcheckingTheExistingDataFlow">
+                </map>
+            </div>
+            <div class="documentation-indented">
+              <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" href="#_checkingTheExistingDataFlowxml_code">
+                  Show configuration XML code of the flow checkingTheExistingDataFlow...
+                </a>
+              </div>
+              <div id="_checkingTheExistingDataFlowxml_code" class="accordion-body collapse" style="height: 0px;">
+                <div class="accordion-inner">
+                    <pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+
+&lt;sub-flow name="checkingTheExistingDataFlow" doc:id="c9dcdde2-4468-415f-9341-7e60027345cc"&gt;  
+    &lt;set-variable value="#[output application/json
+---
+[]]" doc:name="responses Variable" doc:id="53c063c1-ef67-4efd-b413-8d2d8c5a2c67" variableName="responses"/&gt;
+    &lt;ee:transform doc:name="eachRecordVaraible" doc:id="4bc44593-1174-4e03-9374-ed5c53e3c57b"&gt;  
+        &lt;ee:message&gt;    &lt;/ee:message&gt;  
+        &lt;ee:variables&gt; 
+            &lt;ee:set-variable variableName="eachRecordVaraible"&gt;&lt;![CDATA[%dw 2.0
+
+output application/json
+
+---
+
+payload]]&gt;  &lt;/ee:set-variable&gt;
+        &lt;/ee:variables&gt; 
+    &lt;/ee:transform&gt;  
+    &lt;http:request method="GET" doc:name="calling-db-select" doc:id="45ed5b59-344a-4e12-8735-1e9c200d13a8" config-ref="database-request-call" path="/${dbcall.path}/{id}" responseTimeout="200000"&gt;  
+        &lt;http:uri-params&gt;&lt;![CDATA[#[output application/java
+
+---
+
+{
+
+    "id" : vars.eachRecordVaraible.id
+
+}]]]&gt;   &lt;/http:uri-params&gt;
+    &lt;/http:request&gt;  
+    &lt;choice doc:name="Choice" doc:id="a7030bc3-3d92-422d-88f2-e59f0c061e5a"&gt; 
+        &lt;when expression="#[payload.count &amp;gt; 0]"&gt; 
+            &lt;flow-ref doc:name="Flow Reference" doc:id="1177e952-c80c-48d7-ba98-85e40e992f5b" name="updating-data-in-DB-subflow"/&gt; 
+        &lt;/when&gt;  
+        &lt;otherwise&gt; 
+            &lt;flow-ref doc:name="Flow Reference" doc:id="778d1377-0336-4407-8bda-d56facb3a4a2" name="inserting-Data-into-Db-subFlow"/&gt; 
+        &lt;/otherwise&gt; 
+    &lt;/choice&gt;  
+    &lt;set-variable value="#[output application/json
+---
+vars.responses + {&amp;quot;dbmessage&amp;quot; : payload}]" doc:name="Set Variable" doc:id="746e389d-4974-48ec-959d-43d9211dfdf7" variableName="responses"/&gt;
+    &lt;flow-ref doc:name="Flow Reference" doc:id="7e6bc382-eceb-45a8-b91f-1528153ebca4" name="calling-sf-subflow"/&gt; 
+&lt;/sub-flow&gt;
+</code></pre>
+
+                </div>
+              </div>
+              <p></p>
+            </div>
+          </section>
+      </div>
+    </div>
+  </div>
+
+<!-- Footer
+    ================================================== -->
+    <footer class="footer">
+      <div class="container">
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>Designed and built with <a href="https://www.mulesoft.com/platform/studio" target="_blank">Anypoint Studio</a>.</p>
+        <p>Code licensed under the <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache License v2.0</a>. Documentation licensed under <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
+        <p>Icons from <a href="https://glyphicons.com/">Glyphicons Free</a>, licensed under <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
+        <ul class="footer-links">
+          <li><a href="https://blogs.mulesoft.com/bloghome/">Read the blog</a></li>
+          <li><a href="https://www.mulesoft.org/jira/issues/">Submit issues</a></li>
+        </ul>
+      </div>
+    </footer>
+
+
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="assets/widgets.js"></script>
+    <script src="assets/jquery.js"></script>
+    <script src="assets/prettify.js"></script>
+    <script src="assets/bootstrap-transition.js"></script>
+    <script src="assets/bootstrap-alert.js"></script>
+    <script src="assets/bootstrap-modal.js"></script>
+    <script src="assets/bootstrap-dropdown.js"></script>
+    <script src="assets/bootstrap-scrollspy.js"></script>
+    <script src="assets/bootstrap-tab.js"></script>
+    <script src="assets/bootstrap-tooltip.js"></script>
+    <script src="assets/bootstrap-popover.js"></script>
+    <script src="assets/bootstrap-button.js"></script>
+    <script src="assets/bootstrap-collapse.js"></script>
+    <script src="assets/bootstrap-carousel.js"></script>
+    <script src="assets/bootstrap-typeahead.js"></script>
+    <script src="assets/bootstrap-affix.js"></script>
+    <script src="assets/scroller.js"></script>
+    <script src="assets/application.js"></script>
+
+</body>
+</html>
