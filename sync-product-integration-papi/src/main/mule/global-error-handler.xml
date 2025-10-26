@@ -7,36 +7,9 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
 	<error-handler name="global-error-handlerError_Handler" doc:id="f2115cab-499d-4786-91ab-44e14690cc6e" >
-		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="6a645f5f-ac05-4069-9fba-54d4ea115548" type="APIKIT:BAD_REQUEST" >
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="6a645f5f-ac05-4069-9fba-54d4ea115548" type="APIKIT:BAD_REQUEST,APIKIT:NOT_FOUND,APIKIT:METHOD_NOT_ALLOWED,APIKIT:NOT_ACCEPTABLE,APIKIT:UNSUPPORTED_MEDIA_TYPE,APIKIT:NOT_IMPLEMENTED,MULE:COMPOSITE_ROUTING,MULE:EXPRESSION,HTTP:INTERNAL_SERVER_ERROR ,MULE:RETRY_EXHAUSTED" >
 			<flow-ref doc:name="Flow Reference" doc:id="1ddc801c-062d-4bf0-8b31-d2b595e29455" name="global-error-handlerSub_Flow"/>
 		</on-error-propagate>
-		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate1" doc:id="4adaace7-b293-4217-8e5c-5199e1eeccbb" type="APIKIT:NOT_FOUND" >
-			<flow-ref doc:name="Flow Reference" doc:id="5a33219e-9b48-4b46-99c3-853767676080" name="global-error-handlerSub_Flow"/>
-		</on-error-propagate>
-		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate2" doc:id="efdef017-f450-462f-823a-011c8d6085f8" type="APIKIT:METHOD_NOT_ALLOWED" >
-			<flow-ref doc:name="Flow Reference" doc:id="b42595b8-53ea-4d97-803b-de6c8e1c1a0b" name="global-error-handlerSub_Flow"/>
-		</on-error-propagate>
-		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate3" doc:id="3d6487c0-3872-40a9-8989-af67730110f0" type="APIKIT:NOT_ACCEPTABLE" >
-			<flow-ref doc:name="Flow Reference" doc:id="fc34cc0e-285f-4536-9cb9-b82c86c4fd4b" name="global-error-handlerSub_Flow"/>
-		</on-error-propagate>
-		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate4" doc:id="9b5a348a-4837-419e-b489-49bff97e56dd" type="APIKIT:UNSUPPORTED_MEDIA_TYPE" >
-			<flow-ref doc:name="Flow Reference" doc:id="1ba97213-6663-4c9b-b5d4-321486fcd63b" name="global-error-handlerSub_Flow"/>
-		</on-error-propagate>
-		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate5" doc:id="b29bcabe-a06f-4adc-bb80-72ffd4b7f7e8" type="APIKIT:NOT_IMPLEMENTED" >
-			<flow-ref doc:name="Flow Reference" doc:id="9b6d559a-4b32-4176-b80a-2a05421790b3" name="global-error-handlerSub_Flow"/>
-		</on-error-propagate>
-		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="d6a6a439-ca0d-439e-9810-7e96cbf2b191" type="MULE:COMPOSITE_ROUTING">
-			<flow-ref doc:name="Flow Reference" doc:id="c8192d45-5d9c-4b38-885d-e529d3469402" name="global-error-handlerSub_Flow"/>
-		</on-error-propagate>
-		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="bafad7bc-7afe-4530-8580-1c6be8c26071" type="MULE:EXPRESSION">
-			<flow-ref doc:name="Flow Reference" doc:id="dbc107d1-ae23-4ebf-9813-a4b750f95643" name="global-error-handlerSub_Flow"/>
-		</on-error-propagate>
-		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="67fc16b7-9f5b-449a-9006-4314791f86c8" type="HTTP:INTERNAL_SERVER_ERROR ">
-			<flow-ref doc:name="Flow Reference" doc:id="f28a0e7f-cc9f-4c41-957e-f355f1a940e4" name="global-error-handlerSub_Flow"/>
-		</on-error-propagate>
-		<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="65239d39-6c42-49af-8b80-fab4b3a77719" type="MULE:RETRY_EXHAUSTED">
-			<flow-ref doc:name="Flow Reference" doc:id="7f0a36f6-2a58-48c1-941a-a3d9ad34c323" name="global-error-handlerSub_Flow" />
-		</on-error-continue>
 	</error-handler>
 	<sub-flow name="global-error-handlerSub_Flow" doc:id="bfd7e545-3436-4b4f-817b-469821907cd7" >
 		<!-- [STUDIO:"Request"]<http:request method="POST" doc:name="Request" doc:id="038c4f0b-9749-4dea-b928-1f3ccb4cfef5" config-ref="Mail_request_call" path="/${mail.path}">

@@ -1,0 +1,662 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+	xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<munit:config name="fetching-Request-data-test-suite.xml" />
+	<munit:test name="fetching-Request-data-test-suite-calling-sf-subflowTest" doc:id="0a1ca084-15b6-4e19-aa7f-3537d9d36b78" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="external-api-request" doc:id="4ba49128-20a4-43ad-8288-db50847a4638" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="fetchingTheFakestoreapi" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="16a29d70-2298-4ab4-99bf-cd7c98a59f5b" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="database select Request" doc:id="4b3dcbac-dd37-4233-957f-d7c08077dfe8" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="calling-db-select" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="45ed5b59-344a-4e12-8735-1e9c200d13a8" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json&#10;---&#10;{&#10;	count : 1&#10;}]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="database update request Mock" doc:id="d105bd0e-ea67-43f7-89f0-fdab093cdb09" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="callingDbUpdation" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="acdef95d-8096-4940-a355-735edb553f70" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[output application/json&#10;---&#10;{&#10;status:"updated successfully"&#10;}]' />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="database-insertion-call" doc:id="8ee5890d-9318-4be2-a4d1-7ba8cfd1329c" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="dbCallOfInsertion" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="3f6ba88f-fab8-4941-8546-8ced40892056" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[{&#10;	"status" : "success",&#10;	"affected" : 1&#10;}]' />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="mocking-the-sf-request" doc:id="75ce9c8f-d9dd-48b3-bf2a-4b1ede2291c0" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="sfRequestCall" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="88e36f5e-7087-4bc5-9760-230abbfbb8f1" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;  id: 1,&#10;  response: {&#10;    created: false,&#10;    success: true,&#10;    id: "a04gL00000A5LcLQAV",&#10;    errors: [&#10;      &#10;    ]&#10;  }&#10;}]' />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="mockingTheMail" doc:id="f4ec8af4-aee4-456e-ba4b-a9dfcde3cb27" processor="email:send" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Send mail " attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="d1502665-3a84-450c-9a27-9ce1264ef139" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="Email_SMTP" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#["mail is successfully send"]' />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<ee:transform doc:name="Transform Message" doc:id="67384a59-4e3c-4d7c-979b-5da66ef4ad51" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+[
+  {
+    "id": 121,
+    "title": "Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops",
+    "price": 109.95,
+    "description": "Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to 15 inches) in the padded sleeve, your everyday",
+    "category": "men's clothing",
+    "image": "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_t.png",
+    "rating": {
+      "rate": 3.9,
+      "count": 120
+    }
+  },
+  {
+    "id": 2,
+    "title": "Mens Casual Premium Slim Fit T-Shirts ",
+    "price": 22.3,
+    "description": "Slim-fitting style, contrast raglan long sleeve, three-button henley placket, light weight & soft fabric for breathable and comfortable wearing. And Solid stitched shirts with round neck made for durability and a great fit for casual fashion wear and diehard baseball fans. The Henley style round neckline includes a three-button placket.",
+    "category": "men's clothing",
+    "image": "https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_t.png",
+    "rating": {
+      "rate": 4.1,
+      "count": 259
+    }
+  },
+  {
+    "id": 3,
+    "title": "Mens Cotton Jacket",
+    "price": 55.99,
+    "description": "great outerwear jackets for Spring/Autumn/Winter, suitable for many occasions, such as working, hiking, camping, mountain/rock climbing, cycling, traveling or other outdoors. Good gift choice for you or your family member. A warm hearted love to Father, husband or son in this thanksgiving or Christmas Day.",
+    "category": "men's clothing",
+    "image": "https://fakestoreapi.com/img/71li-ujtlUL._AC_UX679_t.png",
+    "rating": {
+      "rate": 4.7,
+      "count": 500
+    }
+  },
+  {
+    "id": 4,
+    "title": "Mens Casual Slim Fit",
+    "price": 15.99,
+    "description": "The color could be slightly different between on the screen and in practice. / Please note that body builds vary by person, therefore, detailed size information should be reviewed below on the product description.",
+    "category": "men's clothing",
+    "image": "https://fakestoreapi.com/img/71YXzeOuslL._AC_UY879_t.png",
+    "rating": {
+      "rate": 2.1,
+      "count": 430
+    }
+  },
+  {
+    "id": 5,
+    "title": "John Hardy Women's Legends Naga Gold & Silver Dragon Station Chain Bracelet",
+    "price": 695,
+    "description": "From our Legends Collection, the Naga was inspired by the mythical water dragon that protects the ocean's pearl. Wear facing inward to be bestowed with love and abundance, or outward for protection.",
+    "category": "jewelery",
+    "image": "https://fakestoreapi.com/img/71pWzhdJNwL._AC_UL640_QL65_ML3_t.png",
+    "rating": {
+      "rate": 4.6,
+      "count": 400
+    }
+  },
+  {
+    "id": 6,
+    "title": "Solid Gold Petite Micropave ",
+    "price": 168,
+    "description": "Satisfaction Guaranteed. Return or exchange any order within 30 days.Designed and sold by Hafeez Center in the United States. Satisfaction Guaranteed. Return or exchange any order within 30 days.",
+    "category": "jewelery",
+    "image": "https://fakestoreapi.com/img/61sbMiUnoGL._AC_UL640_QL65_ML3_t.png",
+    "rating": {
+      "rate": 3.9,
+      "count": 70
+    }
+  },
+  {
+    "id": 17,
+    "title": "White Gold Plated Princess",
+    "price": 9.99,
+    "description": "Classic Created Wedding Engagement Solitaire Diamond Promise Ring for Her. Gifts to spoil your love more for Engagement, Wedding, Anniversary, Valentine's Day...",
+    "category": "jewelery",
+    "image": "https://fakestoreapi.com/img/71YAIFU48IL._AC_UL640_QL65_ML3_t.png",
+    "rating": {
+      "rate": 3,
+      "count": 400
+    }
+  },
+  {
+    "id": 81,
+    "title": "Pierced Owl Rose Gold Plated Stainless Steel Double",
+    "price": 10.99,
+    "description": "Rose Gold Plated Double Flared Tunnel Plug Earrings. Made of 316L Stainless Steel",
+    "category": "jewelery",
+    "image": "https://fakestoreapi.com/img/51UDEzMJVpL._AC_UL640_QL65_ML3_t.png",
+    "rating": {
+      "rate": 1.9,
+      "count": 100
+    }
+  },
+  {
+    "id": 9,
+    "title": "WD 2TB Elements Portable External Hard Drive - USB 3.0 ",
+    "description": "USB 3.0 and USB 2.0 Compatibility Fast data transfers Improve PC Performance High Capacity; Compatibility Formatted NTFS for Windows 10, Windows 8.1, Windows 7; Reformatting may be required for other operating systems; Compatibility may vary depending on user’s hardware configuration and operating system",
+    "category": "electronics",
+    "image": "https://fakestoreapi.com/img/61IBBVJvSDL._AC_SY879_t.png",
+    "rating": {
+      "rate": 3.3,
+      "count": 203
+    }
+  },
+  {
+    "id": 10,
+    "title": "SanDisk SSD PLUS 1TB Internal SSD - SATA III 6 Gb/s",
+    "price": 109,
+    "description": "Easy upgrade for faster boot up, shutdown, application load and response (As compared to 5400 RPM SATA 2.5” hard drive; Based on published specifications and internal benchmarking tests using PCMark vantage scores) Boosts burst write performance, making it ideal for typical PC workloads The perfect balance of performance and reliability Read/write speeds of up to 535MB/s/450MB/s (Based on internal testing; Performance may vary depending upon drive capacity, host device, OS and application.)",
+    "category": "electronics",
+    "image": "https://fakestoreapi.com/img/61U7T1koQqL._AC_SX679_t.png",
+    "rating": {
+      "rate": 2.9,
+      "count": 470
+    }
+  },
+  {
+    "id": 110,
+    "title": "Silicon Power 256GB SSD 3D NAND A55 SLC Cache Performance Boost SATA III 2.5",
+    "price": 109,
+    "description": "3D NAND flash are applied to deliver high transfer speeds Remarkable transfer speeds that enable faster bootup and improved overall system performance. The advanced SLC Cache Technology allows performance boost and longer lifespan 7mm slim design suitable for Ultrabooks and Ultra-slim notebooks. Supports TRIM command, Garbage Collection technology, RAID, and ECC (Error Checking & Correction) to provide the optimized performance and enhanced reliability.",
+    "category": "electronics",
+    "image": "https://fakestoreapi.com/img/71kWymZ+c+L._AC_SX679_t.png",
+    "rating": {
+      "rate": 4.8,
+      "count": 319
+    }
+  },
+  {
+    "id": 12,
+    "title": "WD 4TB Gaming Drive Works with Playstation 4 Portable External Hard Drive",
+    "price": 114,
+    "description": "Expand your PS4 gaming experience, Play anywhere Fast and easy, setup Sleek design with high capacity, 3-year manufacturer's limited warranty",
+    "category": "electronics",
+    "image": "https://fakestoreapi.com/img/61mtL65D4cL._AC_SX679_t.png",
+    "rating": {
+      "rate": 4.8,
+      "count": 400
+    }
+  },
+  {
+    "id": 13,
+    "title": "Acer SB220Q bi 21.5 inches Full HD (1920 x 1080) IPS Ultra-Thin",
+    "price": 599,
+    "description": "21. 5 inches Full HD (1920 x 1080) widescreen IPS display And Radeon free Sync technology. No compatibility for VESA Mount Refresh Rate: 75Hz - Using HDMI port Zero-frame design | ultra-thin | 4ms response time | IPS panel Aspect ratio - 16: 9. Color Supported - 16. 7 million colors. Brightness - 250 nit Tilt angle -5 degree to 15 degree. Horizontal viewing angle-178 degree. Vertical viewing angle-178 degree 75 hertz",
+    "category": "electronics",
+    "image": "https://fakestoreapi.com/img/81QpkIctqPL._AC_SX679_t.png",
+    "rating": {
+      "rate": 2.9,
+      "count": 250
+    }
+  },
+  {
+    "id": 14,
+    "title": "Samsung 49-Inch CHG90 144Hz Curved Gaming Monitor (LC49HG90DMNXZA) – Super Ultrawide Screen QLED ",
+    "price": 999.99,
+    "description": "49 INCH SUPER ULTRAWIDE 32:9 CURVED GAMING MONITOR with dual 27 inch screen side by side QUANTUM DOT (QLED) TECHNOLOGY, HDR support and factory calibration provides stunningly realistic and accurate color and contrast 144HZ HIGH REFRESH RATE and 1ms ultra fast response time work to eliminate motion blur, ghosting, and reduce input lag",
+    "category": "electronics",
+    "image": "https://fakestoreapi.com/img/81Zt42ioCgL._AC_SX679_t.png",
+    "rating": {
+      "rate": 2.2,
+      "count": 140
+    }
+  },
+  {
+    "id": 15,
+    "title": "BIYLACLESEN Women's 3-in-1 Snowboard Jacket Winter Coats",
+    "price": 56.99,
+    "description": "Note:The Jackets is US standard size, Please choose size as your usual wear Material: 100% Polyester; Detachable Liner Fabric: Warm Fleece. Detachable Functional Liner: Skin Friendly, Lightweigt and Warm.Stand Collar Liner jacket, keep you warm in cold weather. Zippered Pockets: 2 Zippered Hand Pockets, 2 Zippered Pockets on Chest (enough to keep cards or keys)and 1 Hidden Pocket Inside.Zippered Hand Pockets and Hidden Pocket keep your things secure. Humanized Design: Adjustable and Detachable Hood and Adjustable cuff to prevent the wind and water,for a comfortable fit. 3 in 1 Detachable Design provide more convenience, you can separate the coat and inner as needed, or wear it together. It is suitable for different season and help you adapt to different climates",
+    "category": "women's clothing",
+    "image": "https://fakestoreapi.com/img/51Y5NI-I5jL._AC_UX679_t.png",
+    "rating": {
+      "rate": 2.6,
+      "count": 235
+    }
+  },
+  {
+    "id": 16,
+    "title": "Lock and Love Women's Removable Hooded Faux Leather Moto Biker Jacket",
+    "price": 29.95,
+    "description": "100% POLYURETHANE(shell) 100% POLYESTER(lining) 75% POLYESTER 25% COTTON (SWEATER), Faux leather material for style and comfort / 2 pockets of front, 2-For-One Hooded denim style faux leather jacket, Button detail on waist / Detail stitching at sides, HAND WASH ONLY / DO NOT BLEACH / LINE DRY / DO NOT IRON",
+    "category": "women's clothing",
+    "image": "https://fakestoreapi.com/img/81XH0e8fefL._AC_UY879_t.png",
+    "rating": {
+      "rate": 2.9,
+      "count": 340
+    }
+  },
+  {
+    "id": 17,
+    "title": "Rain Jacket Women Windbreaker Striped Climbing Raincoats",
+    "price": 39.99,
+    "description": "Lightweight perfet for trip or casual wear---Long sleeve with hooded, adjustable drawstring waist design. Button and zipper front closure raincoat, fully stripes Lined and The Raincoat has 2 side pockets are a good size to hold all kinds of things, it covers the hips, and the hood is generous but doesn't overdo it.Attached Cotton Lined Hood with Adjustable Drawstrings give it a real styled look.",
+    "category": "women's clothing",
+    "image": "https://fakestoreapi.com/img/71HblAHs5xL._AC_UY879_-2t.png",
+    "rating": {
+      "rate": 3.8,
+      "count": 679
+    }
+  },
+  {
+    "id": 18,
+    "title": "MBJ Women's Solid Short Sleeve Boat Neck V ",
+    "price": 9.85,
+    "description": "95% RAYON 5% SPANDEX, Made in USA or Imported, Do Not Bleach, Lightweight fabric with great stretch for comfort, Ribbed on sleeves and neckline / Double stitching on bottom hem",
+    "category": "women's clothing",
+    "image": "https://fakestoreapi.com/img/71z3kpMAYsL._AC_UY879_t.png",
+    "rating": {
+      "rate": 4.7,
+      "count": 130
+    }
+  },
+  {
+    "id": 19,
+    "title": "Opna Women's Short Sleeve Moisture",
+    "price": 7.95,
+    "description": "100% Polyester, Machine wash, 100% cationic polyester interlock, Machine Wash & Pre Shrunk for a Great Fit, Lightweight, roomy and highly breathable with moisture wicking fabric which helps to keep moisture away, Soft Lightweight Fabric with comfortable V-neck collar and a slimmer fit, delivers a sleek, more feminine silhouette and Added Comfort",
+    "category": "women's clothing",
+    "image": "https://fakestoreapi.com/img/51eg55uWmdL._AC_UX679_t.png",
+    "rating": {
+      "rate": 4.5,
+      "count": 146
+    }
+  },
+  {
+    "id": 20,
+    "title": "DANVOUY Womens T Shirt Casual Cotton Short",
+    "price": 12.99,
+    "description": "95%Cotton,5%Spandex, Features: Casual, Short Sleeve, Letter Print,V-Neck,Fashion Tees, The fabric is soft and has some stretch., Occasion: Casual/Office/Beach/School/Home/Street. Season: Spring,Summer,Autumn,Winter.",
+    "category": "women's clothing",
+    "image": "https://fakestoreapi.com/img/61pHAEJ4NML._AC_UX679_t.png",
+    "rating": {
+      "rate": 3.6,
+      "count": 145
+    }
+  }
+]]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<flow-ref doc:name="Flow-ref to calling-sf-subflow" doc:id="077043d7-ebd7-4f4a-840d-dd198c7334b8" name="get:\fetchdata:syc-product-integration-papi-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="b644e233-61ea-4cdc-9699-b1857cbfd45a" expression="#[[&#10;  {&#10;    &quot;id&quot;: 1,&#10;    &quot;title&quot;: &quot;Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops&quot;,&#10;    &quot;price&quot;: 109.95,&#10;    &quot;description&quot;: &quot;Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to 15 inches) in the padded sleeve, your everyday&quot;,&#10;    &quot;category&quot;: &quot;men's clothing&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 3.9,&#10;      &quot;count&quot;: 120&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 2,&#10;    &quot;title&quot;: &quot;Mens Casual Premium Slim Fit T-Shirts &quot;,&#10;    &quot;price&quot;: 22.3,&#10;    &quot;description&quot;: &quot;Slim-fitting style, contrast raglan long sleeve, three-button henley placket, light weight &amp; soft fabric for breathable and comfortable wearing. And Solid stitched shirts with round neck made for durability and a great fit for casual fashion wear and diehard baseball fans. The Henley style round neckline includes a three-button placket.&quot;,&#10;    &quot;category&quot;: &quot;men's clothing&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 4.1,&#10;      &quot;count&quot;: 259&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 3,&#10;    &quot;title&quot;: &quot;Mens Cotton Jacket&quot;,&#10;    &quot;price&quot;: 55.99,&#10;    &quot;description&quot;: &quot;great outerwear jackets for Spring/Autumn/Winter, suitable for many occasions, such as working, hiking, camping, mountain/rock climbing, cycling, traveling or other outdoors. Good gift choice for you or your family member. A warm hearted love to Father, husband or son in this thanksgiving or Christmas Day.&quot;,&#10;    &quot;category&quot;: &quot;men's clothing&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/71li-ujtlUL._AC_UX679_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 4.7,&#10;      &quot;count&quot;: 500&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 4,&#10;    &quot;title&quot;: &quot;Mens Casual Slim Fit&quot;,&#10;    &quot;price&quot;: 15.99,&#10;    &quot;description&quot;: &quot;The color could be slightly different between on the screen and in practice. / Please note that body builds vary by person, therefore, detailed size information should be reviewed below on the product description.&quot;,&#10;    &quot;category&quot;: &quot;men's clothing&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/71YXzeOuslL._AC_UY879_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 2.1,&#10;      &quot;count&quot;: 430&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 5,&#10;    &quot;title&quot;: &quot;John Hardy Women's Legends Naga Gold &amp; Silver Dragon Station Chain Bracelet&quot;,&#10;    &quot;price&quot;: 695,&#10;    &quot;description&quot;: &quot;From our Legends Collection, the Naga was inspired by the mythical water dragon that protects the ocean's pearl. Wear facing inward to be bestowed with love and abundance, or outward for protection.&quot;,&#10;    &quot;category&quot;: &quot;jewelery&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/71pWzhdJNwL._AC_UL640_QL65_ML3_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 4.6,&#10;      &quot;count&quot;: 400&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 6,&#10;    &quot;title&quot;: &quot;Solid Gold Petite Micropave &quot;,&#10;    &quot;price&quot;: 168,&#10;    &quot;description&quot;: &quot;Satisfaction Guaranteed. Return or exchange any order within 30 days.Designed and sold by Hafeez Center in the United States. Satisfaction Guaranteed. Return or exchange any order within 30 days.&quot;,&#10;    &quot;category&quot;: &quot;jewelery&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/61sbMiUnoGL._AC_UL640_QL65_ML3_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 3.9,&#10;      &quot;count&quot;: 70&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 7,&#10;    &quot;title&quot;: &quot;White Gold Plated Princess&quot;,&#10;    &quot;price&quot;: 9.99,&#10;    &quot;description&quot;: &quot;Classic Created Wedding Engagement Solitaire Diamond Promise Ring for Her. Gifts to spoil your love more for Engagement, Wedding, Anniversary, Valentine's Day...&quot;,&#10;    &quot;category&quot;: &quot;jewelery&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/71YAIFU48IL._AC_UL640_QL65_ML3_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 3,&#10;      &quot;count&quot;: 400&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 8,&#10;    &quot;title&quot;: &quot;Pierced Owl Rose Gold Plated Stainless Steel Double&quot;,&#10;    &quot;price&quot;: 10.99,&#10;    &quot;description&quot;: &quot;Rose Gold Plated Double Flared Tunnel Plug Earrings. Made of 316L Stainless Steel&quot;,&#10;    &quot;category&quot;: &quot;jewelery&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/51UDEzMJVpL._AC_UL640_QL65_ML3_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 1.9,&#10;      &quot;count&quot;: 100&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 9,&#10;    &quot;title&quot;: &quot;WD 2TB Elements Portable External Hard Drive - USB 3.0 &quot;,&#10;    &quot;price&quot;: 64,&#10;    &quot;description&quot;: &quot;USB 3.0 and USB 2.0 Compatibility Fast data transfers Improve PC Performance High Capacity; Compatibility Formatted NTFS for Windows 10, Windows 8.1, Windows 7; Reformatting may be required for other operating systems; Compatibility may vary depending on user’s hardware configuration and operating system&quot;,&#10;    &quot;category&quot;: &quot;electronics&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/61IBBVJvSDL._AC_SY879_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 3.3,&#10;      &quot;count&quot;: 203&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 10,&#10;    &quot;title&quot;: &quot;SanDisk SSD PLUS 1TB Internal SSD - SATA III 6 Gb/s&quot;,&#10;    &quot;price&quot;: 109,&#10;    &quot;description&quot;: &quot;Easy upgrade for faster boot up, shutdown, application load and response (As compared to 5400 RPM SATA 2.5” hard drive; Based on published specifications and internal benchmarking tests using PCMark vantage scores) Boosts burst write performance, making it ideal for typical PC workloads The perfect balance of performance and reliability Read/write speeds of up to 535MB/s/450MB/s (Based on internal testing; Performance may vary depending upon drive capacity, host device, OS and application.)&quot;,&#10;    &quot;category&quot;: &quot;electronics&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/61U7T1koQqL._AC_SX679_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 2.9,&#10;      &quot;count&quot;: 470&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 11,&#10;    &quot;title&quot;: &quot;Silicon Power 256GB SSD 3D NAND A55 SLC Cache Performance Boost SATA III 2.5&quot;,&#10;    &quot;price&quot;: 109,&#10;    &quot;description&quot;: &quot;3D NAND flash are applied to deliver high transfer speeds Remarkable transfer speeds that enable faster bootup and improved overall system performance. The advanced SLC Cache Technology allows performance boost and longer lifespan 7mm slim design suitable for Ultrabooks and Ultra-slim notebooks. Supports TRIM command, Garbage Collection technology, RAID, and ECC (Error Checking &amp; Correction) to provide the optimized performance and enhanced reliability.&quot;,&#10;    &quot;category&quot;: &quot;electronics&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/71kWymZ+c+L._AC_SX679_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 4.8,&#10;      &quot;count&quot;: 319&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 12,&#10;    &quot;title&quot;: &quot;WD 4TB Gaming Drive Works with Playstation 4 Portable External Hard Drive&quot;,&#10;    &quot;price&quot;: 114,&#10;    &quot;description&quot;: &quot;Expand your PS4 gaming experience, Play anywhere Fast and easy, setup Sleek design with high capacity, 3-year manufacturer's limited warranty&quot;,&#10;    &quot;category&quot;: &quot;electronics&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/61mtL65D4cL._AC_SX679_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 4.8,&#10;      &quot;count&quot;: 400&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 13,&#10;    &quot;title&quot;: &quot;Acer SB220Q bi 21.5 inches Full HD (1920 x 1080) IPS Ultra-Thin&quot;,&#10;    &quot;price&quot;: 599,&#10;    &quot;description&quot;: &quot;21. 5 inches Full HD (1920 x 1080) widescreen IPS display And Radeon free Sync technology. No compatibility for VESA Mount Refresh Rate: 75Hz - Using HDMI port Zero-frame design | ultra-thin | 4ms response time | IPS panel Aspect ratio - 16: 9. Color Supported - 16. 7 million colors. Brightness - 250 nit Tilt angle -5 degree to 15 degree. Horizontal viewing angle-178 degree. Vertical viewing angle-178 degree 75 hertz&quot;,&#10;    &quot;category&quot;: &quot;electronics&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/81QpkIctqPL._AC_SX679_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 2.9,&#10;      &quot;count&quot;: 250&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 14,&#10;    &quot;title&quot;: &quot;Samsung 49-Inch CHG90 144Hz Curved Gaming Monitor (LC49HG90DMNXZA) – Super Ultrawide Screen QLED &quot;,&#10;    &quot;price&quot;: 999.99,&#10;    &quot;description&quot;: &quot;49 INCH SUPER ULTRAWIDE 32:9 CURVED GAMING MONITOR with dual 27 inch screen side by side QUANTUM DOT (QLED) TECHNOLOGY, HDR support and factory calibration provides stunningly realistic and accurate color and contrast 144HZ HIGH REFRESH RATE and 1ms ultra fast response time work to eliminate motion blur, ghosting, and reduce input lag&quot;,&#10;    &quot;category&quot;: &quot;electronics&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/81Zt42ioCgL._AC_SX679_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 2.2,&#10;      &quot;count&quot;: 140&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 15,&#10;    &quot;title&quot;: &quot;BIYLACLESEN Women's 3-in-1 Snowboard Jacket Winter Coats&quot;,&#10;    &quot;price&quot;: 56.99,&#10;    &quot;description&quot;: &quot;Note:The Jackets is US standard size, Please choose size as your usual wear Material: 100% Polyester; Detachable Liner Fabric: Warm Fleece. Detachable Functional Liner: Skin Friendly, Lightweigt and Warm.Stand Collar Liner jacket, keep you warm in cold weather. Zippered Pockets: 2 Zippered Hand Pockets, 2 Zippered Pockets on Chest (enough to keep cards or keys)and 1 Hidden Pocket Inside.Zippered Hand Pockets and Hidden Pocket keep your things secure. Humanized Design: Adjustable and Detachable Hood and Adjustable cuff to prevent the wind and water,for a comfortable fit. 3 in 1 Detachable Design provide more convenience, you can separate the coat and inner as needed, or wear it together. It is suitable for different season and help you adapt to different climates&quot;,&#10;    &quot;category&quot;: &quot;women's clothing&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/51Y5NI-I5jL._AC_UX679_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 2.6,&#10;      &quot;count&quot;: 235&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 16,&#10;    &quot;title&quot;: &quot;Lock and Love Women's Removable Hooded Faux Leather Moto Biker Jacket&quot;,&#10;    &quot;price&quot;: 29.95,&#10;    &quot;description&quot;: &quot;100% POLYURETHANE(shell) 100% POLYESTER(lining) 75% POLYESTER 25% COTTON (SWEATER), Faux leather material for style and comfort / 2 pockets of front, 2-For-One Hooded denim style faux leather jacket, Button detail on waist / Detail stitching at sides, HAND WASH ONLY / DO NOT BLEACH / LINE DRY / DO NOT IRON&quot;,&#10;    &quot;category&quot;: &quot;women's clothing&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/81XH0e8fefL._AC_UY879_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 2.9,&#10;      &quot;count&quot;: 340&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 17,&#10;    &quot;title&quot;: &quot;Rain Jacket Women Windbreaker Striped Climbing Raincoats&quot;,&#10;    &quot;price&quot;: 39.99,&#10;    &quot;description&quot;: &quot;Lightweight perfet for trip or casual wear---Long sleeve with hooded, adjustable drawstring waist design. Button and zipper front closure raincoat, fully stripes Lined and The Raincoat has 2 side pockets are a good size to hold all kinds of things, it covers the hips, and the hood is generous but doesn't overdo it.Attached Cotton Lined Hood with Adjustable Drawstrings give it a real styled look.&quot;,&#10;    &quot;category&quot;: &quot;women's clothing&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/71HblAHs5xL._AC_UY879_-2t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 3.8,&#10;      &quot;count&quot;: 679&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 18,&#10;    &quot;title&quot;: &quot;MBJ Women's Solid Short Sleeve Boat Neck V &quot;,&#10;    &quot;price&quot;: 9.85,&#10;    &quot;description&quot;: &quot;95% RAYON 5% SPANDEX, Made in USA or Imported, Do Not Bleach, Lightweight fabric with great stretch for comfort, Ribbed on sleeves and neckline / Double stitching on bottom hem&quot;,&#10;    &quot;category&quot;: &quot;women's clothing&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/71z3kpMAYsL._AC_UY879_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 4.7,&#10;      &quot;count&quot;: 130&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 19,&#10;    &quot;title&quot;: &quot;Opna Women's Short Sleeve Moisture&quot;,&#10;    &quot;price&quot;: 7.95,&#10;    &quot;description&quot;: &quot;100% Polyester, Machine wash, 100% cationic polyester interlock, Machine Wash &amp; Pre Shrunk for a Great Fit, Lightweight, roomy and highly breathable with moisture wicking fabric which helps to keep moisture away, Soft Lightweight Fabric with comfortable V-neck collar and a slimmer fit, delivers a sleek, more feminine silhouette and Added Comfort&quot;,&#10;    &quot;category&quot;: &quot;women's clothing&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/51eg55uWmdL._AC_UX679_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 4.5,&#10;      &quot;count&quot;: 146&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 20,&#10;    &quot;title&quot;: &quot;DANVOUY Womens T Shirt Casual Cotton Short&quot;,&#10;    &quot;price&quot;: 12.99,&#10;    &quot;description&quot;: &quot;95%Cotton,5%Spandex, Features: Casual, Short Sleeve, Letter Print,V-Neck,Fashion Tees, The fabric is soft and has some stretch., Occasion: Casual/Office/Beach/School/Home/Street. Season: Spring,Summer,Autumn,Winter.&quot;,&#10;    &quot;category&quot;: &quot;women's clothing&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/61pHAEJ4NML._AC_UX679_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 3.6,&#10;      &quot;count&quot;: 145&#10;    }&#10;  }&#10;]]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="fetching-Request-data-test-suite-calling-sf-subflowTest1" doc:id="6d9926c6-7294-47fc-b7b8-cdb7c96c5f03" description="Test" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="external-api-request" doc:id="527427d6-bc88-4c3b-8775-9dde63e5ce35" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="fetchingTheFakestoreapi" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="16a29d70-2298-4ab4-99bf-cd7c98a59f5b" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="database select Request" doc:id="8b0507f3-f792-486a-a322-f9b1cdee0a07" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="calling-db-select" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="45ed5b59-344a-4e12-8735-1e9c200d13a8" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json&#10;---&#10;{&#10;	count : 0&#10;}]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="database update request Mock" doc:id="a287b395-2fc6-442e-8821-907e05f0c45e" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="callingDbUpdation" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="acdef95d-8096-4940-a355-735edb553f70" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[output application/json&#10;---&#10;{&#10;status:"updated successfully"&#10;}]' />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="database-insertion-call" doc:id="455ebb6a-2b61-49d0-8e53-37ce324175db" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="dbCallOfInsertion" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="3f6ba88f-fab8-4941-8546-8ced40892056" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[{&#10;	"status" : "success",&#10;	"affected" : 1&#10;}]' />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="mocking-the-sf-request" doc:id="17f19abf-03f0-4cf0-82e4-34ca0017cdbb" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="sfRequestCall" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="88e36f5e-7087-4bc5-9760-230abbfbb8f1" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;  id: 1,&#10;  response: {&#10;    created: false,&#10;    success: true,&#10;    id: "a04gL00000A5LcLQAV",&#10;    errors: [&#10;      &#10;    ]&#10;  }&#10;}]' />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="mockingTheMail" doc:id="6d77ebf7-a165-430d-80ca-18186ac2e115" processor="email:send" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Send mail " attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="d1502665-3a84-450c-9a27-9ce1264ef139" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#["mail is successfully send"]' />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<ee:transform doc:name="Transform Message" doc:id="d2aa4f7c-fbcf-4024-bb9c-8f7c83afc36d" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+[
+  {
+    "id": 121,
+    "title": "Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops",
+    "price": 109.95,
+    "description": "Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to 15 inches) in the padded sleeve, your everyday",
+    "category": "men's clothing",
+    "image": "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_t.png",
+    "rating": {
+      "rate": 3.9,
+      "count": 120
+    }
+  },
+  {
+    "id": 2,
+    "title": "Mens Casual Premium Slim Fit T-Shirts ",
+    "price": 22.3,
+    "description": "Slim-fitting style, contrast raglan long sleeve, three-button henley placket, light weight & soft fabric for breathable and comfortable wearing. And Solid stitched shirts with round neck made for durability and a great fit for casual fashion wear and diehard baseball fans. The Henley style round neckline includes a three-button placket.",
+    "category": "men's clothing",
+    "image": "https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_t.png",
+    "rating": {
+      "rate": 4.1,
+      "count": 259
+    }
+  },
+  {
+    "id": 3,
+    "title": "Mens Cotton Jacket",
+    "price": 55.99,
+    "description": "great outerwear jackets for Spring/Autumn/Winter, suitable for many occasions, such as working, hiking, camping, mountain/rock climbing, cycling, traveling or other outdoors. Good gift choice for you or your family member. A warm hearted love to Father, husband or son in this thanksgiving or Christmas Day.",
+    "category": "men's clothing",
+    "image": "https://fakestoreapi.com/img/71li-ujtlUL._AC_UX679_t.png",
+    "rating": {
+      "rate": 4.7,
+      "count": 500
+    }
+  },
+  {
+    "id": 4,
+    "title": "Mens Casual Slim Fit",
+    "price": 15.99,
+    "description": "The color could be slightly different between on the screen and in practice. / Please note that body builds vary by person, therefore, detailed size information should be reviewed below on the product description.",
+    "category": "men's clothing",
+    "image": "https://fakestoreapi.com/img/71YXzeOuslL._AC_UY879_t.png",
+    "rating": {
+      "rate": 2.1,
+      "count": 430
+    }
+  },
+  {
+    "id": 5,
+    "title": "John Hardy Women's Legends Naga Gold & Silver Dragon Station Chain Bracelet",
+    "price": 695,
+    "description": "From our Legends Collection, the Naga was inspired by the mythical water dragon that protects the ocean's pearl. Wear facing inward to be bestowed with love and abundance, or outward for protection.",
+    "category": "jewelery",
+    "image": "https://fakestoreapi.com/img/71pWzhdJNwL._AC_UL640_QL65_ML3_t.png",
+    "rating": {
+      "rate": 4.6,
+      "count": 400
+    }
+  },
+  {
+    "id": 6,
+    "title": "Solid Gold Petite Micropave ",
+    "price": 168,
+    "description": "Satisfaction Guaranteed. Return or exchange any order within 30 days.Designed and sold by Hafeez Center in the United States. Satisfaction Guaranteed. Return or exchange any order within 30 days.",
+    "category": "jewelery",
+    "image": "https://fakestoreapi.com/img/61sbMiUnoGL._AC_UL640_QL65_ML3_t.png",
+    "rating": {
+      "rate": 3.9,
+      "count": 70
+    }
+  },
+  {
+    "id": 17,
+    "title": "White Gold Plated Princess",
+    "price": 9.99,
+    "description": "Classic Created Wedding Engagement Solitaire Diamond Promise Ring for Her. Gifts to spoil your love more for Engagement, Wedding, Anniversary, Valentine's Day...",
+    "category": "jewelery",
+    "image": "https://fakestoreapi.com/img/71YAIFU48IL._AC_UL640_QL65_ML3_t.png",
+    "rating": {
+      "rate": 3,
+      "count": 400
+    }
+  },
+  {
+    "id": 81,
+    "title": "Pierced Owl Rose Gold Plated Stainless Steel Double",
+    "price": 10.99,
+    "description": "Rose Gold Plated Double Flared Tunnel Plug Earrings. Made of 316L Stainless Steel",
+    "category": "jewelery",
+    "image": "https://fakestoreapi.com/img/51UDEzMJVpL._AC_UL640_QL65_ML3_t.png",
+    "rating": {
+      "rate": 1.9,
+      "count": 100
+    }
+  },
+  {
+    "id": 9,
+    "title": "WD 2TB Elements Portable External Hard Drive - USB 3.0 ",
+    "description": "USB 3.0 and USB 2.0 Compatibility Fast data transfers Improve PC Performance High Capacity; Compatibility Formatted NTFS for Windows 10, Windows 8.1, Windows 7; Reformatting may be required for other operating systems; Compatibility may vary depending on user’s hardware configuration and operating system",
+    "category": "electronics",
+    "image": "https://fakestoreapi.com/img/61IBBVJvSDL._AC_SY879_t.png",
+    "rating": {
+      "rate": 3.3,
+      "count": 203
+    }
+  },
+  {
+    "id": 10,
+    "title": "SanDisk SSD PLUS 1TB Internal SSD - SATA III 6 Gb/s",
+    "price": 109,
+    "description": "Easy upgrade for faster boot up, shutdown, application load and response (As compared to 5400 RPM SATA 2.5” hard drive; Based on published specifications and internal benchmarking tests using PCMark vantage scores) Boosts burst write performance, making it ideal for typical PC workloads The perfect balance of performance and reliability Read/write speeds of up to 535MB/s/450MB/s (Based on internal testing; Performance may vary depending upon drive capacity, host device, OS and application.)",
+    "category": "electronics",
+    "image": "https://fakestoreapi.com/img/61U7T1koQqL._AC_SX679_t.png",
+    "rating": {
+      "rate": 2.9,
+      "count": 470
+    }
+  },
+  {
+    "id": 110,
+    "title": "Silicon Power 256GB SSD 3D NAND A55 SLC Cache Performance Boost SATA III 2.5",
+    "price": 109,
+    "description": "3D NAND flash are applied to deliver high transfer speeds Remarkable transfer speeds that enable faster bootup and improved overall system performance. The advanced SLC Cache Technology allows performance boost and longer lifespan 7mm slim design suitable for Ultrabooks and Ultra-slim notebooks. Supports TRIM command, Garbage Collection technology, RAID, and ECC (Error Checking & Correction) to provide the optimized performance and enhanced reliability.",
+    "category": "electronics",
+    "image": "https://fakestoreapi.com/img/71kWymZ+c+L._AC_SX679_t.png",
+    "rating": {
+      "rate": 4.8,
+      "count": 319
+    }
+  },
+  {
+    "id": 12,
+    "title": "WD 4TB Gaming Drive Works with Playstation 4 Portable External Hard Drive",
+    "price": 114,
+    "description": "Expand your PS4 gaming experience, Play anywhere Fast and easy, setup Sleek design with high capacity, 3-year manufacturer's limited warranty",
+    "category": "electronics",
+    "image": "https://fakestoreapi.com/img/61mtL65D4cL._AC_SX679_t.png",
+    "rating": {
+      "rate": 4.8,
+      "count": 400
+    }
+  },
+  {
+    "id": 13,
+    "title": "Acer SB220Q bi 21.5 inches Full HD (1920 x 1080) IPS Ultra-Thin",
+    "price": 599,
+    "description": "21. 5 inches Full HD (1920 x 1080) widescreen IPS display And Radeon free Sync technology. No compatibility for VESA Mount Refresh Rate: 75Hz - Using HDMI port Zero-frame design | ultra-thin | 4ms response time | IPS panel Aspect ratio - 16: 9. Color Supported - 16. 7 million colors. Brightness - 250 nit Tilt angle -5 degree to 15 degree. Horizontal viewing angle-178 degree. Vertical viewing angle-178 degree 75 hertz",
+    "category": "electronics",
+    "image": "https://fakestoreapi.com/img/81QpkIctqPL._AC_SX679_t.png",
+    "rating": {
+      "rate": 2.9,
+      "count": 250
+    }
+  },
+  {
+    "id": 14,
+    "title": "Samsung 49-Inch CHG90 144Hz Curved Gaming Monitor (LC49HG90DMNXZA) – Super Ultrawide Screen QLED ",
+    "price": 999.99,
+    "description": "49 INCH SUPER ULTRAWIDE 32:9 CURVED GAMING MONITOR with dual 27 inch screen side by side QUANTUM DOT (QLED) TECHNOLOGY, HDR support and factory calibration provides stunningly realistic and accurate color and contrast 144HZ HIGH REFRESH RATE and 1ms ultra fast response time work to eliminate motion blur, ghosting, and reduce input lag",
+    "category": "electronics",
+    "image": "https://fakestoreapi.com/img/81Zt42ioCgL._AC_SX679_t.png",
+    "rating": {
+      "rate": 2.2,
+      "count": 140
+    }
+  },
+  {
+    "id": 15,
+    "title": "BIYLACLESEN Women's 3-in-1 Snowboard Jacket Winter Coats",
+    "price": 56.99,
+    "description": "Note:The Jackets is US standard size, Please choose size as your usual wear Material: 100% Polyester; Detachable Liner Fabric: Warm Fleece. Detachable Functional Liner: Skin Friendly, Lightweigt and Warm.Stand Collar Liner jacket, keep you warm in cold weather. Zippered Pockets: 2 Zippered Hand Pockets, 2 Zippered Pockets on Chest (enough to keep cards or keys)and 1 Hidden Pocket Inside.Zippered Hand Pockets and Hidden Pocket keep your things secure. Humanized Design: Adjustable and Detachable Hood and Adjustable cuff to prevent the wind and water,for a comfortable fit. 3 in 1 Detachable Design provide more convenience, you can separate the coat and inner as needed, or wear it together. It is suitable for different season and help you adapt to different climates",
+    "category": "women's clothing",
+    "image": "https://fakestoreapi.com/img/51Y5NI-I5jL._AC_UX679_t.png",
+    "rating": {
+      "rate": 2.6,
+      "count": 235
+    }
+  },
+  {
+    "id": 16,
+    "title": "Lock and Love Women's Removable Hooded Faux Leather Moto Biker Jacket",
+    "price": 29.95,
+    "description": "100% POLYURETHANE(shell) 100% POLYESTER(lining) 75% POLYESTER 25% COTTON (SWEATER), Faux leather material for style and comfort / 2 pockets of front, 2-For-One Hooded denim style faux leather jacket, Button detail on waist / Detail stitching at sides, HAND WASH ONLY / DO NOT BLEACH / LINE DRY / DO NOT IRON",
+    "category": "women's clothing",
+    "image": "https://fakestoreapi.com/img/81XH0e8fefL._AC_UY879_t.png",
+    "rating": {
+      "rate": 2.9,
+      "count": 340
+    }
+  },
+  {
+    "id": 17,
+    "title": "Rain Jacket Women Windbreaker Striped Climbing Raincoats",
+    "price": 39.99,
+    "description": "Lightweight perfet for trip or casual wear---Long sleeve with hooded, adjustable drawstring waist design. Button and zipper front closure raincoat, fully stripes Lined and The Raincoat has 2 side pockets are a good size to hold all kinds of things, it covers the hips, and the hood is generous but doesn't overdo it.Attached Cotton Lined Hood with Adjustable Drawstrings give it a real styled look.",
+    "category": "women's clothing",
+    "image": "https://fakestoreapi.com/img/71HblAHs5xL._AC_UY879_-2t.png",
+    "rating": {
+      "rate": 3.8,
+      "count": 679
+    }
+  },
+  {
+    "id": 18,
+    "title": "MBJ Women's Solid Short Sleeve Boat Neck V ",
+    "price": 9.85,
+    "description": "95% RAYON 5% SPANDEX, Made in USA or Imported, Do Not Bleach, Lightweight fabric with great stretch for comfort, Ribbed on sleeves and neckline / Double stitching on bottom hem",
+    "category": "women's clothing",
+    "image": "https://fakestoreapi.com/img/71z3kpMAYsL._AC_UY879_t.png",
+    "rating": {
+      "rate": 4.7,
+      "count": 130
+    }
+  },
+  {
+    "id": 19,
+    "title": "Opna Women's Short Sleeve Moisture",
+    "price": 7.95,
+    "description": "100% Polyester, Machine wash, 100% cationic polyester interlock, Machine Wash & Pre Shrunk for a Great Fit, Lightweight, roomy and highly breathable with moisture wicking fabric which helps to keep moisture away, Soft Lightweight Fabric with comfortable V-neck collar and a slimmer fit, delivers a sleek, more feminine silhouette and Added Comfort",
+    "category": "women's clothing",
+    "image": "https://fakestoreapi.com/img/51eg55uWmdL._AC_UX679_t.png",
+    "rating": {
+      "rate": 4.5,
+      "count": 146
+    }
+  },
+  {
+    "id": 20,
+    "title": "DANVOUY Womens T Shirt Casual Cotton Short",
+    "price": 12.99,
+    "description": "95%Cotton,5%Spandex, Features: Casual, Short Sleeve, Letter Print,V-Neck,Fashion Tees, The fabric is soft and has some stretch., Occasion: Casual/Office/Beach/School/Home/Street. Season: Spring,Summer,Autumn,Winter.",
+    "category": "women's clothing",
+    "image": "https://fakestoreapi.com/img/61pHAEJ4NML._AC_UX679_t.png",
+    "rating": {
+      "rate": 3.6,
+      "count": 145
+    }
+  }
+]]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<flow-ref doc:name="Flow-ref to calling-sf-subflow" doc:id="b23bd748-2e24-4551-94e6-3604caaa754b" name="get:\fetchdata:syc-product-integration-papi-config" />
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="069a28bc-a2cd-4d49-b0d5-03469ec2abbd" expression="#[[&#10;  {&#10;    &quot;id&quot;: 1,&#10;    &quot;title&quot;: &quot;Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops&quot;,&#10;    &quot;price&quot;: 109.95,&#10;    &quot;description&quot;: &quot;Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to 15 inches) in the padded sleeve, your everyday&quot;,&#10;    &quot;category&quot;: &quot;men's clothing&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 3.9,&#10;      &quot;count&quot;: 120&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 2,&#10;    &quot;title&quot;: &quot;Mens Casual Premium Slim Fit T-Shirts &quot;,&#10;    &quot;price&quot;: 22.3,&#10;    &quot;description&quot;: &quot;Slim-fitting style, contrast raglan long sleeve, three-button henley placket, light weight &amp; soft fabric for breathable and comfortable wearing. And Solid stitched shirts with round neck made for durability and a great fit for casual fashion wear and diehard baseball fans. The Henley style round neckline includes a three-button placket.&quot;,&#10;    &quot;category&quot;: &quot;men's clothing&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 4.1,&#10;      &quot;count&quot;: 259&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 3,&#10;    &quot;title&quot;: &quot;Mens Cotton Jacket&quot;,&#10;    &quot;price&quot;: 55.99,&#10;    &quot;description&quot;: &quot;great outerwear jackets for Spring/Autumn/Winter, suitable for many occasions, such as working, hiking, camping, mountain/rock climbing, cycling, traveling or other outdoors. Good gift choice for you or your family member. A warm hearted love to Father, husband or son in this thanksgiving or Christmas Day.&quot;,&#10;    &quot;category&quot;: &quot;men's clothing&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/71li-ujtlUL._AC_UX679_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 4.7,&#10;      &quot;count&quot;: 500&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 4,&#10;    &quot;title&quot;: &quot;Mens Casual Slim Fit&quot;,&#10;    &quot;price&quot;: 15.99,&#10;    &quot;description&quot;: &quot;The color could be slightly different between on the screen and in practice. / Please note that body builds vary by person, therefore, detailed size information should be reviewed below on the product description.&quot;,&#10;    &quot;category&quot;: &quot;men's clothing&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/71YXzeOuslL._AC_UY879_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 2.1,&#10;      &quot;count&quot;: 430&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 5,&#10;    &quot;title&quot;: &quot;John Hardy Women's Legends Naga Gold &amp; Silver Dragon Station Chain Bracelet&quot;,&#10;    &quot;price&quot;: 695,&#10;    &quot;description&quot;: &quot;From our Legends Collection, the Naga was inspired by the mythical water dragon that protects the ocean's pearl. Wear facing inward to be bestowed with love and abundance, or outward for protection.&quot;,&#10;    &quot;category&quot;: &quot;jewelery&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/71pWzhdJNwL._AC_UL640_QL65_ML3_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 4.6,&#10;      &quot;count&quot;: 400&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 6,&#10;    &quot;title&quot;: &quot;Solid Gold Petite Micropave &quot;,&#10;    &quot;price&quot;: 168,&#10;    &quot;description&quot;: &quot;Satisfaction Guaranteed. Return or exchange any order within 30 days.Designed and sold by Hafeez Center in the United States. Satisfaction Guaranteed. Return or exchange any order within 30 days.&quot;,&#10;    &quot;category&quot;: &quot;jewelery&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/61sbMiUnoGL._AC_UL640_QL65_ML3_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 3.9,&#10;      &quot;count&quot;: 70&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 7,&#10;    &quot;title&quot;: &quot;White Gold Plated Princess&quot;,&#10;    &quot;price&quot;: 9.99,&#10;    &quot;description&quot;: &quot;Classic Created Wedding Engagement Solitaire Diamond Promise Ring for Her. Gifts to spoil your love more for Engagement, Wedding, Anniversary, Valentine's Day...&quot;,&#10;    &quot;category&quot;: &quot;jewelery&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/71YAIFU48IL._AC_UL640_QL65_ML3_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 3,&#10;      &quot;count&quot;: 400&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 8,&#10;    &quot;title&quot;: &quot;Pierced Owl Rose Gold Plated Stainless Steel Double&quot;,&#10;    &quot;price&quot;: 10.99,&#10;    &quot;description&quot;: &quot;Rose Gold Plated Double Flared Tunnel Plug Earrings. Made of 316L Stainless Steel&quot;,&#10;    &quot;category&quot;: &quot;jewelery&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/51UDEzMJVpL._AC_UL640_QL65_ML3_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 1.9,&#10;      &quot;count&quot;: 100&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 9,&#10;    &quot;title&quot;: &quot;WD 2TB Elements Portable External Hard Drive - USB 3.0 &quot;,&#10;    &quot;price&quot;: 64,&#10;    &quot;description&quot;: &quot;USB 3.0 and USB 2.0 Compatibility Fast data transfers Improve PC Performance High Capacity; Compatibility Formatted NTFS for Windows 10, Windows 8.1, Windows 7; Reformatting may be required for other operating systems; Compatibility may vary depending on user’s hardware configuration and operating system&quot;,&#10;    &quot;category&quot;: &quot;electronics&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/61IBBVJvSDL._AC_SY879_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 3.3,&#10;      &quot;count&quot;: 203&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 10,&#10;    &quot;title&quot;: &quot;SanDisk SSD PLUS 1TB Internal SSD - SATA III 6 Gb/s&quot;,&#10;    &quot;price&quot;: 109,&#10;    &quot;description&quot;: &quot;Easy upgrade for faster boot up, shutdown, application load and response (As compared to 5400 RPM SATA 2.5” hard drive; Based on published specifications and internal benchmarking tests using PCMark vantage scores) Boosts burst write performance, making it ideal for typical PC workloads The perfect balance of performance and reliability Read/write speeds of up to 535MB/s/450MB/s (Based on internal testing; Performance may vary depending upon drive capacity, host device, OS and application.)&quot;,&#10;    &quot;category&quot;: &quot;electronics&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/61U7T1koQqL._AC_SX679_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 2.9,&#10;      &quot;count&quot;: 470&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 11,&#10;    &quot;title&quot;: &quot;Silicon Power 256GB SSD 3D NAND A55 SLC Cache Performance Boost SATA III 2.5&quot;,&#10;    &quot;price&quot;: 109,&#10;    &quot;description&quot;: &quot;3D NAND flash are applied to deliver high transfer speeds Remarkable transfer speeds that enable faster bootup and improved overall system performance. The advanced SLC Cache Technology allows performance boost and longer lifespan 7mm slim design suitable for Ultrabooks and Ultra-slim notebooks. Supports TRIM command, Garbage Collection technology, RAID, and ECC (Error Checking &amp; Correction) to provide the optimized performance and enhanced reliability.&quot;,&#10;    &quot;category&quot;: &quot;electronics&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/71kWymZ+c+L._AC_SX679_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 4.8,&#10;      &quot;count&quot;: 319&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 12,&#10;    &quot;title&quot;: &quot;WD 4TB Gaming Drive Works with Playstation 4 Portable External Hard Drive&quot;,&#10;    &quot;price&quot;: 114,&#10;    &quot;description&quot;: &quot;Expand your PS4 gaming experience, Play anywhere Fast and easy, setup Sleek design with high capacity, 3-year manufacturer's limited warranty&quot;,&#10;    &quot;category&quot;: &quot;electronics&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/61mtL65D4cL._AC_SX679_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 4.8,&#10;      &quot;count&quot;: 400&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 13,&#10;    &quot;title&quot;: &quot;Acer SB220Q bi 21.5 inches Full HD (1920 x 1080) IPS Ultra-Thin&quot;,&#10;    &quot;price&quot;: 599,&#10;    &quot;description&quot;: &quot;21. 5 inches Full HD (1920 x 1080) widescreen IPS display And Radeon free Sync technology. No compatibility for VESA Mount Refresh Rate: 75Hz - Using HDMI port Zero-frame design | ultra-thin | 4ms response time | IPS panel Aspect ratio - 16: 9. Color Supported - 16. 7 million colors. Brightness - 250 nit Tilt angle -5 degree to 15 degree. Horizontal viewing angle-178 degree. Vertical viewing angle-178 degree 75 hertz&quot;,&#10;    &quot;category&quot;: &quot;electronics&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/81QpkIctqPL._AC_SX679_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 2.9,&#10;      &quot;count&quot;: 250&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 14,&#10;    &quot;title&quot;: &quot;Samsung 49-Inch CHG90 144Hz Curved Gaming Monitor (LC49HG90DMNXZA) – Super Ultrawide Screen QLED &quot;,&#10;    &quot;price&quot;: 999.99,&#10;    &quot;description&quot;: &quot;49 INCH SUPER ULTRAWIDE 32:9 CURVED GAMING MONITOR with dual 27 inch screen side by side QUANTUM DOT (QLED) TECHNOLOGY, HDR support and factory calibration provides stunningly realistic and accurate color and contrast 144HZ HIGH REFRESH RATE and 1ms ultra fast response time work to eliminate motion blur, ghosting, and reduce input lag&quot;,&#10;    &quot;category&quot;: &quot;electronics&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/81Zt42ioCgL._AC_SX679_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 2.2,&#10;      &quot;count&quot;: 140&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 15,&#10;    &quot;title&quot;: &quot;BIYLACLESEN Women's 3-in-1 Snowboard Jacket Winter Coats&quot;,&#10;    &quot;price&quot;: 56.99,&#10;    &quot;description&quot;: &quot;Note:The Jackets is US standard size, Please choose size as your usual wear Material: 100% Polyester; Detachable Liner Fabric: Warm Fleece. Detachable Functional Liner: Skin Friendly, Lightweigt and Warm.Stand Collar Liner jacket, keep you warm in cold weather. Zippered Pockets: 2 Zippered Hand Pockets, 2 Zippered Pockets on Chest (enough to keep cards or keys)and 1 Hidden Pocket Inside.Zippered Hand Pockets and Hidden Pocket keep your things secure. Humanized Design: Adjustable and Detachable Hood and Adjustable cuff to prevent the wind and water,for a comfortable fit. 3 in 1 Detachable Design provide more convenience, you can separate the coat and inner as needed, or wear it together. It is suitable for different season and help you adapt to different climates&quot;,&#10;    &quot;category&quot;: &quot;women's clothing&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/51Y5NI-I5jL._AC_UX679_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 2.6,&#10;      &quot;count&quot;: 235&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 16,&#10;    &quot;title&quot;: &quot;Lock and Love Women's Removable Hooded Faux Leather Moto Biker Jacket&quot;,&#10;    &quot;price&quot;: 29.95,&#10;    &quot;description&quot;: &quot;100% POLYURETHANE(shell) 100% POLYESTER(lining) 75% POLYESTER 25% COTTON (SWEATER), Faux leather material for style and comfort / 2 pockets of front, 2-For-One Hooded denim style faux leather jacket, Button detail on waist / Detail stitching at sides, HAND WASH ONLY / DO NOT BLEACH / LINE DRY / DO NOT IRON&quot;,&#10;    &quot;category&quot;: &quot;women's clothing&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/81XH0e8fefL._AC_UY879_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 2.9,&#10;      &quot;count&quot;: 340&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 17,&#10;    &quot;title&quot;: &quot;Rain Jacket Women Windbreaker Striped Climbing Raincoats&quot;,&#10;    &quot;price&quot;: 39.99,&#10;    &quot;description&quot;: &quot;Lightweight perfet for trip or casual wear---Long sleeve with hooded, adjustable drawstring waist design. Button and zipper front closure raincoat, fully stripes Lined and The Raincoat has 2 side pockets are a good size to hold all kinds of things, it covers the hips, and the hood is generous but doesn't overdo it.Attached Cotton Lined Hood with Adjustable Drawstrings give it a real styled look.&quot;,&#10;    &quot;category&quot;: &quot;women's clothing&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/71HblAHs5xL._AC_UY879_-2t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 3.8,&#10;      &quot;count&quot;: 679&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 18,&#10;    &quot;title&quot;: &quot;MBJ Women's Solid Short Sleeve Boat Neck V &quot;,&#10;    &quot;price&quot;: 9.85,&#10;    &quot;description&quot;: &quot;95% RAYON 5% SPANDEX, Made in USA or Imported, Do Not Bleach, Lightweight fabric with great stretch for comfort, Ribbed on sleeves and neckline / Double stitching on bottom hem&quot;,&#10;    &quot;category&quot;: &quot;women's clothing&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/71z3kpMAYsL._AC_UY879_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 4.7,&#10;      &quot;count&quot;: 130&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 19,&#10;    &quot;title&quot;: &quot;Opna Women's Short Sleeve Moisture&quot;,&#10;    &quot;price&quot;: 7.95,&#10;    &quot;description&quot;: &quot;100% Polyester, Machine wash, 100% cationic polyester interlock, Machine Wash &amp; Pre Shrunk for a Great Fit, Lightweight, roomy and highly breathable with moisture wicking fabric which helps to keep moisture away, Soft Lightweight Fabric with comfortable V-neck collar and a slimmer fit, delivers a sleek, more feminine silhouette and Added Comfort&quot;,&#10;    &quot;category&quot;: &quot;women's clothing&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/51eg55uWmdL._AC_UX679_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 4.5,&#10;      &quot;count&quot;: 146&#10;    }&#10;  },&#10;  {&#10;    &quot;id&quot;: 20,&#10;    &quot;title&quot;: &quot;DANVOUY Womens T Shirt Casual Cotton Short&quot;,&#10;    &quot;price&quot;: 12.99,&#10;    &quot;description&quot;: &quot;95%Cotton,5%Spandex, Features: Casual, Short Sleeve, Letter Print,V-Neck,Fashion Tees, The fabric is soft and has some stretch., Occasion: Casual/Office/Beach/School/Home/Street. Season: Spring,Summer,Autumn,Winter.&quot;,&#10;    &quot;category&quot;: &quot;women's clothing&quot;,&#10;    &quot;image&quot;: &quot;https://fakestoreapi.com/img/61pHAEJ4NML._AC_UX679_t.png&quot;,&#10;    &quot;rating&quot;: {&#10;      &quot;rate&quot;: 3.6,&#10;      &quot;count&quot;: 145&#10;    }&#10;  }&#10;]]" is="#[MunitTools::notNullValue()]" />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="fetching-Request-data-test-suiteTest" doc:id="1b5c357e-920d-4a4a-baec-a7c87a36aaa6">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="da154c27-c380-4e66-990f-b2fe79af09f8" processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="syc-product-integration-papi-config" attributeName="config-ref" />
+					<munit-tools:with-attribute whereValue="APIkit Router." attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow Reference" doc:id="54e53294-112e-47b3-8085-2621e663303e" name="syc-product-integration-papi-main"/>
+		</munit:execution>
+	</munit:test>
+	<munit:test name="fetching-Request-data-test-suiteTest1" doc:id="37c0ed92-c112-4880-ae28-89dc19b6aa8f" expectedErrorType="APIKIT:BAD_REQUEST">
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="Mock when" doc:id="e3618031-527b-485f-bfa3-b5ef71f421a8" processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="syc-product-integration-papi-config" attributeName="config-ref" />
+					<munit-tools:with-attribute whereValue="APIkit Router." attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APIKIT:BAD_REQUEST" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow Reference" doc:id="c85f5b42-88ec-40a7-8243-fc001c408415" name="syc-product-integration-papi-main" />
+		</munit:execution>
+	</munit:test>
+
+
+</mule>

@@ -20,62 +20,147 @@ http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/em
 				<ee:set-variable resource="dwl/validation.dwl" variableName="validation" />
 			</ee:variables>
 		</ee:transform>
-		<foreach doc:name="For Each" doc:id="3cc0ce18-68f7-4f62-a595-754295941790" collection="#[vars.validation.validData]">
-			<!-- [STUDIO:"Scatter-Gather"]<scatter-gather doc:name="Scatter-Gather" doc:id="00a025a6-38f3-4e36-8224-eec5781ad203" >
-				<route >
-					<http:request method="POST" doc:name="databaseRequestCall" doc:id="83502760-091d-4e29-9fae-02c21dc3ec07" config-ref="database-request-call" path="/${dbcall.path}" responseTimeout="300000">
-					</http:request>
-				</route>
-				<route >
-					<http:request method="POST" doc:name="salesforceRequestCall" doc:id="0a52da2e-0c1c-499f-9aef-ea4fbb5dc67b" config-ref="salesforce-Request-call" path="/${sfcall.path}" responseTimeout="300000">
-					</http:request>
-				</route>
-			</scatter-gather> [STUDIO] -->
-			<set-variable value="#[output application/json&#10;---&#10;[]]" doc:name="responses Variable" doc:id="53c063c1-ef67-4efd-b413-8d2d8c5a2c67" variableName="responses"/>
-			<ee:transform doc:name="eachRecordVaraible" doc:id="4bc44593-1174-4e03-9374-ed5c53e3c57b" >
-				<ee:message >
-				</ee:message>
-				<ee:variables >
-					<ee:set-variable variableName="eachRecordVaraible" ><![CDATA[%dw 2.0
+		<ee:transform doc:name="variableDeclaations" doc:id="24a6a1e4-b34e-4c36-812e-f36070c014ba" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="processData" ><![CDATA[%dw 2.0
 output application/json
 ---
-payload]]></ee:set-variable>
-				</ee:variables>
-			</ee:transform>
-			<try doc:name="Try" doc:id="05a5ac43-e55f-47e9-8e68-ba99fd769f55" >
-				<until-successful maxRetries="2" doc:name="Until Successful" doc:id="015415c5-9690-4838-baa0-8a0162927ccb" millisBetweenRetries="15000">
-				<logger level="INFO" doc:name="entryDbRequestCall" doc:id="320e4a15-53d7-4b6d-a8bb-9bc10c7c46ff" message='#[["Try to Insert the data in to the database"] ++ [{"Inserting The data " : payload}]]' />
-				<http:request method="POST" doc:name="dbRequestCall" doc:id="3f6ba88f-fab8-4941-8546-8ced40892056" config-ref="database-request-call" path="/${dbcall.path}" responseTimeout="300000">
-					<http:body><![CDATA[#[vars.eachRecordVaraible]]]></http:body>
-				</http:request>
-				<logger level="INFO" doc:name="exitDbCall" doc:id="07979f1f-dd8b-40db-9364-df2603895228" message='#["Request Call is Successfully Done"]' />
-			</until-successful>
-				<error-handler ref="global-error-handlerError_Handler" />
+[]]]></ee:set-variable>
+				<ee:set-variable variableName="unprocesseddata" ><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<foreach doc:name="For Each" doc:id="3cc0ce18-68f7-4f62-a595-754295941790" collection="#[vars.validation.validData]">
+			<try doc:name="Try" doc:id="c161423f-d73e-4ad3-986e-2d5c013f2e5c" >
+				<flow-ref doc:name="refering The checking " doc:id="c88872c8-7cd0-4de2-a0a8-c0b8a914349c" name="checkingTheExistingDataFlow" />
+				<ee:transform doc:name="processDataVariable" doc:id="4e3e8142-ab80-4298-8ba1-f7e5a7009d88" >
+					<ee:message >
+					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="processData" ><![CDATA[%dw 2.0
+output application/json
+---
+vars.processData + {
+	id : vars.eachRecordVaraible.id,
+	response : {
+    databasemessage : vars.responses.dbmessage.status[0],
+    salesforcemessage : {
+    	id : salesforceid : vars.responses.sfmessage.response.id[0],
+        operation : if(vars.responses.sfmessage.response.created[0] == false) "perform the updating operation" else "performing the create operation",
+        status : if(vars.responses.sfmessage.response.success[0] == true) "success" else "failure",
+        error : vars.responses.sfmessage.response.errors[0]
+
+    }
+}
+}]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+				<error-handler >
+					<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="136571cc-f38d-43c9-abed-7ca4c854b3fe" type="ANY">
+						<logger level="INFO" doc:name="Logger" doc:id="48f49b27-09ef-4d74-8909-753588ac7164" message="#[payload]"/>
+					</on-error-continue>
+				</error-handler>
 			</try>
-			<set-variable value='#[output application/json&#10;---&#10;vars.responses + {"dbmessage" : payload}]' doc:name="Set Variable" doc:id="746e389d-4974-48ec-959d-43d9211dfdf7" variableName="responses"/>
-			<try doc:name="Try" doc:id="8198a033-95dc-45df-94f5-3825ba5ce2fb" >
-				<until-successful maxRetries="2" doc:name="Until Successful" doc:id="44357257-3392-4505-b50c-97d1eb1553bf" millisBetweenRetries="15000">
+		</foreach>
+		<!-- [STUDIO:"calling The mail"]<http:request method="POST" doc:name="calling The mail" doc:id="8e2b80bb-19db-4919-bd95-18994651215b" config-ref="Mail_request_call" path="/${mail.path}" responseTimeout="150000">
+			<http:body><![CDATA[#[vars.processData&#93;&#93;&#93;></http:body>
+		</http:request> [STUDIO] -->
+		<flow-ref doc:name="Flow Reference" doc:id="98f95602-a890-48e9-a5bc-b29d5c7a9927" name="sending-mail-Sub_Flow1"/>
+		<ee:transform doc:name="final Response" doc:id="23fdafa1-2118-4564-a0ce-0d28b0c074bc" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message" : "check your mail for the id"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="exitCheck" doc:id="4f4256e7-88ca-4228-b6d7-5edb45a0f8d9" message='#["Exit From the Fetching-request-datasubflow "]'/>
+	</sub-flow>
+	<sub-flow name="calling-sf-subflow" doc:id="d60c48ad-c51b-4c74-bbe2-f879727896a6" >
+		<until-successful maxRetries="2" doc:name="Until Successful" doc:id="44357257-3392-4505-b50c-97d1eb1553bf" millisBetweenRetries="15000">
 				<logger level="INFO" doc:name="entrySalesForceCall" doc:id="c1d87409-c513-4fff-984e-4b09faab6b53" message='#[["Calling The salesforce  and try to insert the data"] ++ ["the data trying to insert" : payload]]' />
 				<http:request method="POST" doc:name="sfRequestCall" doc:id="88e36f5e-7087-4bc5-9760-230abbfbb8f1" config-ref="salesforce-Request-call" path="/${sfcall.path}" responseTimeout="300000">
 					<http:body><![CDATA[#[vars.eachRecordVaraible]]]></http:body>
 				</http:request>
 				<logger level="INFO" doc:name="exitSalesforceCall" doc:id="c4abec95-32e4-45ff-ab99-24de8d3a484a" message='#["Data Insertion is Successfully done"]' />
 			</until-successful>
-				<error-handler ref="global-error-handlerError_Handler" />
-			</try>
-			<set-variable value='#[output application/json&#10;---&#10;vars.responses + {"sfmessage" : payload}]' doc:name="Inserting Sf Response " doc:id="2227e91e-8fc2-4897-b39f-e7aae6d86d4b" variableName="responses"/>
-			<!-- [STUDIO:"Transform Message"]<ee:transform doc:name="Transform Message" doc:id="7adcee2c-2ce4-457f-8764-311db410bf2b">
-			<ee:message>
-				<ee:set-payload><![CDATA[%dw 2.0
+		<set-variable value='#[output application/json&#10;---&#10;vars.responses + {"sfmessage" : payload}]' doc:name="Inserting Sf Response " doc:id="2227e91e-8fc2-4897-b39f-e7aae6d86d4b" variableName="responses" />
+	</sub-flow>
+	<sub-flow name="sending-mail-Sub_Flow1" doc:id="32f7163c-5d2b-46de-8fed-095fcd7980c0" >
+		<logger level="INFO" doc:name="calling The Mail" doc:id="e311313f-f0d0-4563-9b41-c931359c92ba" message='#["reqesting The send mail component to send the data "]'/>
+		<email:send doc:name="Send mail " doc:id="d1502665-3a84-450c-9a27-9ce1264ef139" config-ref="Email_SMTP" fromAddress="gopivarr1@gmail.com" subject="Sync-products data">
+			<email:to-addresses >
+				<email:to-address value="gopivarri5612v@gmail.com" />
+			</email:to-addresses>
+			<email:body contentType="text/plain">
+				<email:content ><![CDATA[the given attachment contains the all data processed from the api]]></email:content>
+			</email:body>
+			<email:attachments ><![CDATA[#[%dw 2.0
 output application/json
-&#45;&#45;-
-vars.responses + payload&#93;&#93;></ee:set-payload>
-			</ee:message>
-		</ee:transform> [STUDIO] -->
-			<http:request method="POST" doc:name="calling The mail" doc:id="8e2b80bb-19db-4919-bd95-18994651215b" config-ref="Mail_request_call" path="/${mail.path}">
-			<http:body><![CDATA[#[vars.responses]]]></http:body>
+var currentTimestamp = now() as String {format: "yyyy-MM-dd"}
+---
+{
+	("processed Data" ++ "_" ++ currentTimestamp ++ ".txt"): write(vars.processData, "application/json")
+}]]]></email:attachments>
+		</email:send>
+		<logger level="INFO" doc:name="response Mail" doc:id="ea281849-606a-4f8e-a3bf-6e40ada7df62" message='#["response send to the mail "]'/>
+	</sub-flow>
+	<sub-flow name="inserting-Data-into-Db-subFlow" doc:id="603b3034-fa00-44f5-9579-c82ddb55d7c2" >
+		<until-successful maxRetries="2" doc:name="Until Successful" doc:id="015415c5-9690-4838-baa0-8a0162927ccb" millisBetweenRetries="15000">
+				<logger level="INFO" doc:name="entryDbRequestCall" doc:id="320e4a15-53d7-4b6d-a8bb-9bc10c7c46ff" message='#[["Try to Insert the data in to the database"] ++ [{"Inserting The data " : payload}]]' />
+				<http:request method="POST" doc:name="dbCallOfInsertion" doc:id="3f6ba88f-fab8-4941-8546-8ced40892056" config-ref="database-request-call" path="/${dbcall.path}" responseTimeout="300000">
+					<http:body><![CDATA[#[vars.eachRecordVaraible]]]></http:body>
+				</http:request>
+				<logger level="INFO" doc:name="exitDbCall" doc:id="07979f1f-dd8b-40db-9364-df2603895228" message='#["Request Call is Successfully Done"]' />
+			</until-successful>
+	</sub-flow>
+	<sub-flow name="updating-data-in-DB-subflow" doc:id="78376fef-2e77-496d-8d50-37ddf0b68dc3" >
+		<logger level="INFO" doc:name="callingDbUpdation" doc:id="f5478a96-2f46-4d78-8ead-8d5d0204f33a" />
+		<http:request method="PUT" doc:name="callingDbUpdation" doc:id="acdef95d-8096-4940-a355-735edb553f70" config-ref="database-request-call" path="/${dbcall.path}/{id}" responseTimeout="300000">
+			<http:body ><![CDATA[#[vars.eachRecordVaraible]]]></http:body>
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"id" : vars.eachRecordVaraible.id
+}]]]></http:uri-params>
 		</http:request>
-		</foreach>
-		<logger level="INFO" doc:name="exitCheck" doc:id="4f4256e7-88ca-4228-b6d7-5edb45a0f8d9" message='#["Exit From the Fetching-request-datasubflow "]'/>
+		<logger level="INFO" doc:name="response Of Db updation" doc:id="a8d3fdd8-0310-4a9a-bc38-a06f8583dcdb" />
+	</sub-flow>
+	<sub-flow name="checkingTheExistingDataFlow" doc:id="c9dcdde2-4468-415f-9341-7e60027345cc" >
+		<set-variable value="#[output application/json&#10;---&#10;[]]" doc:name="responses Variable" doc:id="53c063c1-ef67-4efd-b413-8d2d8c5a2c67" variableName="responses" />
+		<ee:transform doc:name="eachRecordVaraible" doc:id="4bc44593-1174-4e03-9374-ed5c53e3c57b">
+				<ee:message>
+				</ee:message>
+				<ee:variables>
+					<ee:set-variable variableName="eachRecordVaraible"><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+		<http:request method="GET" doc:name="calling-db-select" doc:id="45ed5b59-344a-4e12-8735-1e9c200d13a8" config-ref="database-request-call" path="/${dbcall.path}/{id}" responseTimeout="200000">
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"id" : vars.eachRecordVaraible.id
+}]]]></http:uri-params>
+		</http:request>
+		<choice doc:name="Choice" doc:id="a7030bc3-3d92-422d-88f2-e59f0c061e5a" >
+			<when expression="#[payload.count &gt; 0]">
+				<flow-ref doc:name="Flow Reference" doc:id="1177e952-c80c-48d7-ba98-85e40e992f5b" name="updating-data-in-DB-subflow"/>
+			</when>
+			<otherwise >
+				<flow-ref doc:name="Flow Reference" doc:id="778d1377-0336-4407-8bda-d56facb3a4a2" name="inserting-Data-into-Db-subFlow"/>
+			</otherwise>
+		</choice>
+		<set-variable value='#[output application/json&#10;---&#10;vars.responses + {"dbmessage" : payload}]' doc:name="Set Variable" doc:id="746e389d-4974-48ec-959d-43d9211dfdf7" variableName="responses" />
+		<flow-ref doc:name="Flow Reference" doc:id="7e6bc382-eceb-45a8-b91f-1528153ebca4" name="calling-sf-subflow"/>
 	</sub-flow>
 </mule>

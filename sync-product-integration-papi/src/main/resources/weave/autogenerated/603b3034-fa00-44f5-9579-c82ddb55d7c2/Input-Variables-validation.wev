@@ -1,0 +1,4 @@
+%dw 2.0
+
+type auto_603b3034_fa00_44f5_9579_c82ddb55d7c2_Input_Variables_validation = Any
+

@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<mule xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http"
-	xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
-http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd">
-	<http:listener-config name="syc-product-integration-papi-config-1" doc:name="HTTP Listener config" doc:id="ca6c46d5-8049-4926-ba28-3385512797f0" >
-		<http:listener-connection host="${http.host}" port="${http.port}" />
-	</http:listener-config>
-	<apikit:config outboundHeadersMapName="outboundHeadersMapName" httpStatusVarName="httpStatus" doc:name="Router" doc:id="22a4620d-45cf-4a07-a5ea-6da801999a84" name="syc-product-integration-papi-config" api="api\syc-product-integration-papi.raml" />
-	<configuration-properties doc:name="Configuration properties" doc:id="c9efa588-5d67-4713-bfbc-e901fab71a56" file="devproperties\dev.yaml" />
-	<http:request-config name="products_request_config" doc:name="HTTP Request configuration" doc:id="7956522d-3b52-46a2-abe9-5a806e87a417">
-		<http:request-connection protocol="HTTPS" host="${request.host}"/>
-	</http:request-config>
-	<http:request-config name="database-request-call" doc:name="HTTP Request configuration" doc:id="7f1e9008-a920-42a6-8b24-1b2f4b392d20" basePath="/${dbcall.basepath}" >
-		<http:request-connection host="${dbcall.host}" port="${dbcall.port}" />
-	</http:request-config>
-	<http:request-config name="salesforce-Request-call" doc:name="HTTP Request configuration" doc:id="541a6b81-480b-4b20-b2b1-eb2ef5131102" basePath="/${sfcall.basepath}">
-		<http:request-connection host="${sfcall.host}" connectionIdleTimeout="30000000" port="${sfcall.port}"/>
-	</http:request-config>
-	<http:request-config name="Mail_request_call" doc:name="HTTP Request configuration" doc:id="55ed0b85-f7d6-405a-a809-c80c2c6b81f9" basePath="/${mail.basepath}">
-		<http:request-connection host="${mail.host}" port="${mail.port}"/>
-	</http:request-config>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:email="http://www.mulesoft.org/schema/mule/email" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd">
+    <http:listener-config name="syc-product-integration-papi-config-1" doc:name="HTTP Listener config" doc:id="ca6c46d5-8049-4926-ba28-3385512797f0">
+        <http:listener-connection host="${http.host}" port="${http.port}" />
+    </http:listener-config>
+    <apikit:config name="syc-product-integration-papi-config" api="resource::4f105f33-ac28-42d4-8771-e2e0cfeb419d:syc-product-integration-papi:1.0.2:raml:zip:syc-product-integration-papi.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <configuration-properties doc:name="Configuration properties" doc:id="c9efa588-5d67-4713-bfbc-e901fab71a56" file="devproperties\dev.yaml" />
+    <http:request-config name="products_request_config" doc:name="HTTP Request configuration" doc:id="7956522d-3b52-46a2-abe9-5a806e87a417">
+        <http:request-connection protocol="HTTPS" host="${request.host}" />
+    </http:request-config>
+    <http:request-config name="database-request-call" doc:name="HTTP Request configuration" doc:id="7f1e9008-a920-42a6-8b24-1b2f4b392d20" basePath="/${dbcall.basepath}">
+        <http:request-connection host="${dbcall.host}" port="${dbcall.port}" />
+    </http:request-config>
+    <http:request-config name="salesforce-Request-call" doc:name="HTTP Request configuration" doc:id="541a6b81-480b-4b20-b2b1-eb2ef5131102" basePath="/${sfcall.basepath}">
+        <http:request-connection host="${sfcall.host}" connectionIdleTimeout="30000000" port="${sfcall.port}" />
+    </http:request-config>
+    <email:smtp-config name="Email_SMTP" doc:name="Email SMTP" doc:id="46047ec2-686d-4b9d-b1d0-7d871534d22c">
+        <email:smtp-connection host="${smtp.host}" port="${smtp.port}" user="${smtp.user}" password="${smtp.password}" >
+			<email:properties >
+				<email:property key="mail.smtp.starttls.enable" value="true" />
+			</email:properties>
+		</email:smtp-connection>
+    </email:smtp-config>
 </mule>

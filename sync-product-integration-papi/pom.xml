@@ -102,6 +102,13 @@
 			<version>1.2.1</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>4f105f33-ac28-42d4-8771-e2e0cfeb419d</groupId>
+			<artifactId>syc-product-integration-papi</artifactId>
+			<version>1.0.2</version>
+			<classifier>raml</classifier>
+			<type>zip</type>
+		</dependency>
 	</dependencies>
 
 	<repositories>
