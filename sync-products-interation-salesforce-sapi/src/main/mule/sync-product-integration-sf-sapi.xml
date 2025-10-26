@@ -10,12 +10,12 @@
                 <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
             </http:error-response>
         </http:listener>
-        <logger level="INFO" doc:name="sfEntryCheck" doc:id="5366f7ee-0600-4a91-a657-a8f030b3f01c" message='#["Entrying Into The salesforce APi"]'/>
-		<apikit:router config-ref="sync-product-integration-sf-sapi-config"/>
-		<logger level="INFO" doc:name="sfExitCheck" doc:id="117b070e-cac7-4bbe-a005-48e503265940" message='#["Exiting From the salesforce APi"]'/>
-		<error-handler ref="global-error-handlersError_Handler" />
+        <logger level="INFO" doc:name="sfEntryCheck" doc:id="5366f7ee-0600-4a91-a657-a8f030b3f01c" message="#[&quot;Entrying Into The salesforce APi&quot;]" />
+        <apikit:router config-ref="sync-product-integration-sf-sapi-config" doc:id="87ad3e23-a000-49f6-903d-ec87e8298712"/>
+        <logger level="INFO" doc:name="sfExitCheck" doc:id="117b070e-cac7-4bbe-a005-48e503265940" message="#[&quot;Exiting From the salesforce APi&quot;]" />
+        <error-handler ref="global-error-handlersError_Handler" />
     </flow>
-    <flow name="post:\insert\sf:application\json:sync-product-integration-sf-sapi-config">
-		<flow-ref doc:name="Flow Reference" doc:id="40ca504e-ab5e-4d7a-89fb-52bf635f1f8f" name="sf-creatingdataSub_Flow"/>
+    <flow name="post:\creatingRecorssf:application\json:sync-product-integration-sf-sapi-config">
+		<flow-ref doc:name="Flow Reference" doc:id="40ca504e-ab5e-4d7a-89fb-52bf635f1f8f" name="sf-creatingdataSub_Flow" />
     </flow>
 </mule>

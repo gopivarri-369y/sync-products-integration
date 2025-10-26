@@ -7,13 +7,12 @@ http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mu
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<sub-flow name="sf-creatingdataSub_Flow" doc:id="77570921-defa-457f-949b-cc9f5584c51b" >
 		<logger level="INFO" doc:name="entryCheck" doc:id="1aca13b1-2271-4a7d-af7b-356b3b24a06d" message='#[["entered into the post: insert\sf flow"&#10;&#10;]]'/>
-		<until-successful maxRetries="2" doc:name="Until Successful" doc:id="bd918cbf-a7e4-41e6-af55-40db5f406b5d" millisBetweenRetries="10000">
-			<logger level="INFO" doc:name="callingCreate" doc:id="ba4b4673-9e1e-4417-a2a6-3f3f850c5858" message='#[["trying To insert the data",{&#10;	"data": payload&#10;}]]'/>
-			<salesforce:create type="storeproduct__c" doc:name="Create" doc:id="07697add-fad3-4027-ba37-e7f055444c39" config-ref="Salesforce_Config">
-				<salesforce:records ><![CDATA[#[%dw 2.0
+		<logger level="INFO" doc:name="callingCreate" doc:id="ba4b4673-9e1e-4417-a2a6-3f3f850c5858" message='#[["trying To insert the data",{&#10;	"data": payload&#10;}]]' />
+		<!-- [STUDIO:"Create"]<salesforce:create type="storeproduct__c" doc:name="Create" doc:id="07697add-fad3-4027-ba37-e7f055444c39" config-ref="Salesforce_Config">
+				<salesforce:records><![CDATA[#[%dw 2.0
 output application/json
----
-[payload] map (
+&#45;&#45;-
+[payload&#93; map (
     {
     "id__c": $.id ,
     "title__c" : $.title ,
@@ -25,16 +24,24 @@ output application/json
     "ratingcount__c" : $.rating.count 
 
     }
-)]]]></salesforce:records>
-			</salesforce:create>
-			<logger level="DEBUG" doc:name="responseOfCreate" doc:id="5b0ef6ca-3759-474d-a2ca-12d29e47d82e" message='#["data is successfully inserted"]' category="debug"/>
-		</until-successful>
+)&#93;&#93;&#93;></salesforce:records>
+			</salesforce:create> [STUDIO] -->
+		<set-variable value='#[%dw 2.0&#10;output application/json&#10;---&#10;[payload] map (&#10;    {&#10;    "id__c": $.id ,&#10;    "title__c" : $.title ,&#10;    "price__c" : $.price ,&#10;    "description__c" : $.description,&#10;    "category__c": $.category,&#10;    "image__c" : $.image ,&#10;    "ratingrate__c" : $.rating.rate ,&#10;    "ratingcount__c" : $.rating.count &#10;&#10;    }&#10;)]' doc:name="recordData" doc:id="75918064-7c0c-4ca3-b001-44819df5e388" variableName="recordData"/>
+		<salesforce:upsert doc:name="Upsert" doc:id="ad22e0fb-4ee1-4619-9c68-ec6f03e506d8" config-ref="Salesforce_Config" objectType="storeproduct__c" externalIdFieldName="id__c">
+			<salesforce:records ><![CDATA[#[vars.recordData]]]></salesforce:records>
+		</salesforce:upsert>
+		<logger level="DEBUG" doc:name="responseOfCreate" doc:id="5b0ef6ca-3759-474d-a2ca-12d29e47d82e" message='#["data is successfully inserted"]' category="debug" />
 		<ee:transform doc:name="ResponseOfApi" doc:id="623aac04-09ae-49ae-b4fc-f701d4a4da68" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
 ---
-payload.items.payload]]></ee:set-payload>
+
+{
+	id : vars.recordData.id__c[0] ,
+	response : payload.items.payload[0] 
+	
+}]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
 		<logger level="INFO" doc:name="exitCheck" doc:id="59712420-5485-4834-9b7d-8b2806614574" message='#["exiting from the flow post : insert\sf"]'/>

@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="sync-product-integration-sf-sapi-suite.xml" />
+	<munit:test name="sync-product-integration-sf-sapi-main-test" doc:id="3ab052de-cd7e-46cf-8ff3-89b8d1e29a39" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock APIkit Router" doc:id="5e82eba4-681c-43fb-939a-eda036ed7501" processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="87ad3e23-a000-49f6-903d-ec87e8298712" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://syncproductintegrationsfsapimaintest\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeadersMapName" value="#[readUrl('classpath://syncproductintegrationsfsapimaintest\mock_variable_.dwl')]" />
+						<munit-tools:variable key="httpStatus" value="#[readUrl('classpath://syncproductintegrationsfsapimaintest\mock_variable_1.dwl')]" />
+						<munit-tools:variable key="recordData" value="#[output application/json --- readUrl('classpath://syncproductintegrationsfsapimaintest\mock_variable_2.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="db60a67b-2a41-456e-a848-106beef6800d" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://syncproductintegrationsfsapimaintest\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://syncproductintegrationsfsapimaintest\set-event_attributes.dwl')]" />
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to sync-product-integration-sf-sapi-main" doc:id="711d84cd-1bc1-4235-8abe-f446f444348a" name="sync-product-integration-sf-sapi-main"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="f3d37b9f-64bf-4818-a658-2a3f43e79ef4" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import syncproductintegrationsfsapimaintest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="post:\creatingRecorssf:application\json:sync-product-integration-sf-sapi-config-test" doc:id="ea0bea44-cdcb-4693-b40e-03caa299750a" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Flow Reference" doc:id="c3eab524-f243-4ca6-a60a-9030e2cc14ff" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="40ca504e-ab5e-4d7a-89fb-52bf635f1f8f" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://postcreatingRecorssfapplicationjsonsyncproductintegrationsfsapiconfigtest\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeadersMapName" value="#[readUrl('classpath://postcreatingRecorssfapplicationjsonsyncproductintegrationsfsapiconfigtest\mock_variable_.dwl')]" />
+						<munit-tools:variable key="recordData" value="#[output application/json --- readUrl('classpath://postcreatingRecorssfapplicationjsonsyncproductintegrationsfsapiconfigtest\mock_variable_1.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="093dc468-4a3d-4399-9bd1-4fd708a00cd8" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://postcreatingRecorssfapplicationjsonsyncproductintegrationsfsapiconfigtest\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://postcreatingRecorssfapplicationjsonsyncproductintegrationsfsapiconfigtest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeadersMapName" value="#[readUrl('classpath://postcreatingRecorssfapplicationjsonsyncproductintegrationsfsapiconfigtest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to post:\creatingRecorssf:application\json:sync-product-integration-sf-sapi-config" doc:id="8904c628-c7ce-419c-9c83-2773c3c45dc3" name="post:\creatingRecorssf:application\json:sync-product-integration-sf-sapi-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="13b5dcf4-1037-4153-a34b-818016aa7be2" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import postcreatingRecorssfapplicationjsonsyncproductintegrationsfsapiconfigtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="sf-creatingdataSub_Flow-test" doc:id="8e994a65-c80e-4474-aefd-96c0c27577ca" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Upsert" doc:id="0fb89258-ff09-424c-8397-a3f56fc50242" processor="salesforce:upsert">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="ad22e0fb-4ee1-4619-9c68-ec6f03e506d8" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/java --- readUrl('classpath://sfcreatingdataSubFlowtest\mock_payload.dwl')]" mediaType="application/java" encoding="UTF-8" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeadersMapName" value="#[readUrl('classpath://sfcreatingdataSubFlowtest\mock_variable_.dwl')]" />
+						<munit-tools:variable key="recordData" value="#[output application/json --- readUrl('classpath://sfcreatingdataSubFlowtest\mock_variable_1.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="7f6c1aa1-f5d9-4815-93f9-0d9351f6a477" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://sfcreatingdataSubFlowtest\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://sfcreatingdataSubFlowtest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeadersMapName" value="#[readUrl('classpath://sfcreatingdataSubFlowtest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to sf-creatingdataSub_Flow" doc:id="e0db4fac-438d-4986-8e9e-f1a85d593ce9" name="sf-creatingdataSub_Flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="f430c64a-640b-41ef-b305-a0117cc673ba" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import sfcreatingdataSubFlowtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="sync-product-integration-sf-sapi-main-test1" doc:id="321a9325-3479-4295-806a-7dee27872557" expectedErrorType="APIKIT:BAD_REQUEST">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock APIkit Router" doc:id="e6eb5e4a-bf1b-4d57-8b06-666df151e183" processor="apikit:router" >
+				
+				<munit-tools:with-attributes>
+					
+					<munit-tools:with-attribute whereValue="87ad3e23-a000-49f6-903d-ec87e8298712" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APIKIT:NOT_FOUND" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="12fcedef-4454-4027-b257-6f87ebad2458" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://syncproductintegrationsfsapimaintest\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://syncproductintegrationsfsapimaintest\set-event_attributes.dwl')]" />
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to sync-product-integration-sf-sapi-main" doc:id="ba65b39b-e2f3-4750-a622-0f4687078943" name="sync-product-integration-sf-sapi-main" />
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="a2929df6-8c7f-4dcc-851e-95d300f37e9f" message="The payload does not match" >
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import syncproductintegrationsfsapimaintest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="sync-product-integration-sf-sapi-main-test2" doc:id="03bc4710-1434-4fad-948d-c0f8b7d3ec1a" expectedErrorType="APIKIT:BAD_REQUEST" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock APIkit Router" doc:id="7dcbef34-0046-4040-8594-d4a1e5c1756a" processor="apikit:router" >
+				
+				<munit-tools:with-attributes>
+					
+					<munit-tools:with-attribute whereValue="87ad3e23-a000-49f6-903d-ec87e8298712" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="0dedc46e-7e9f-456f-9067-1e689a6d6e12" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://syncproductintegrationsfsapimaintest\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://syncproductintegrationsfsapimaintest\set-event_attributes.dwl')]" />
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to sync-product-integration-sf-sapi-main" doc:id="0ab2a8c8-e864-43f8-aa9b-6433bddc404e" name="sync-product-integration-sf-sapi-main" />
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="0e799a9f-cdbe-48d6-ae57-1a8b475fc9ca" message="The payload does not match" >
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import syncproductintegrationsfsapimaintest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="sync-product-integration-sf-sapi-main-test3" doc:id="f83edfae-aa5b-4a99-84f6-7ad491d99fa5" expectedErrorType="APIKIT:BAD_REQUEST" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock APIkit Router" doc:id="487025ec-8f28-4aeb-9e9e-3cc1611b6b5c" processor="apikit:router" >
+				
+				<munit-tools:with-attributes>
+					
+					<munit-tools:with-attribute whereValue="87ad3e23-a000-49f6-903d-ec87e8298712" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="58ce4b92-4e6c-4981-a25b-2d533d055022" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://syncproductintegrationsfsapimaintest\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://syncproductintegrationsfsapimaintest\set-event_attributes.dwl')]" />
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to sync-product-integration-sf-sapi-main" doc:id="1650460e-717c-4e6b-bfb5-b8628b2b4b97" name="sync-product-integration-sf-sapi-main" />
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="ceb49092-860b-4444-a1cf-6075ed487841" message="The payload does not match" >
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import syncproductintegrationsfsapimaintest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="sync-product-integration-sf-sapi-main-test4" doc:id="6102098d-4bb1-42ac-8cf0-d6313de399ca" expectedErrorType="APIKIT:BAD_REQUEST" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock APIkit Router" doc:id="812cba0f-397c-4ba2-97f4-920dfeebf270" processor="apikit:router" >
+				
+				<munit-tools:with-attributes>
+					
+					<munit-tools:with-attribute whereValue="87ad3e23-a000-49f6-903d-ec87e8298712" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="c1fae2ed-feba-4701-bea9-6aded2660871" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://syncproductintegrationsfsapimaintest\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://syncproductintegrationsfsapimaintest\set-event_attributes.dwl')]" />
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to sync-product-integration-sf-sapi-main" doc:id="b0fb363d-1db1-4e49-b2fa-f5c5d9e30576" name="sync-product-integration-sf-sapi-main" />
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="11802c11-1156-4cc4-8b04-f0e1de1e66b5" message="The payload does not match" >
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import syncproductintegrationsfsapimaintest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="sync-product-integration-sf-sapi-main-test5" doc:id="2ca7aa23-a5a7-4ea2-ab8c-70f30e123646" expectedErrorType="APIKIT:BAD_REQUEST" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock APIkit Router" doc:id="a2e3607f-9fcb-4d50-a86b-b0509820550e" processor="apikit:router" >
+				
+				<munit-tools:with-attributes>
+					
+					<munit-tools:with-attribute whereValue="87ad3e23-a000-49f6-903d-ec87e8298712" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="7a7be1f9-f398-404b-82dc-efab596961cd" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://syncproductintegrationsfsapimaintest\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://syncproductintegrationsfsapimaintest\set-event_attributes.dwl')]" />
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to sync-product-integration-sf-sapi-main" doc:id="37762e95-8308-492d-8d99-5dbf40284f1c" name="sync-product-integration-sf-sapi-main" />
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="559ea0bb-e44c-4385-a7df-caf58d1d5438" message="The payload does not match" >
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import syncproductintegrationsfsapimaintest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>

@@ -83,13 +83,6 @@
 			<classifier>mule-plugin</classifier>
 		</dependency>
 		<dependency>
-			<groupId>4f105f33-ac28-42d4-8771-e2e0cfeb419d</groupId>
-			<artifactId>sync-product-integration-sf-sapi</artifactId>
-			<version>1.0.1</version>
-			<classifier>raml</classifier>
-			<type>zip</type>
-		</dependency>
-		<dependency>
 			<groupId>com.mulesoft.munit</groupId>
 			<artifactId>munit-runner</artifactId>
 			<version>3.4.0</version>
@@ -108,6 +101,13 @@
 			<artifactId>assertions</artifactId>
 			<version>1.2.1</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>4f105f33-ac28-42d4-8771-e2e0cfeb419d</groupId>
+			<artifactId>sync-product-integration-sf-sapi</artifactId>
+			<version>1.0.2</version>
+			<classifier>raml</classifier>
+			<type>zip</type>
 		</dependency>
 	</dependencies>
 

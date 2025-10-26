@@ -5,23 +5,8 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<error-handler name="global-error-handlersError_Handler" doc:id="fe3c83b2-1238-42e4-871f-dc27056a11c6" >
-		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="47e374ce-ab66-4e57-81a9-53ffff86e891" type="APIKIT:BAD_REQUEST" >
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="47e374ce-ab66-4e57-81a9-53ffff86e891" type="APIKIT:NOT_ACCEPTABLE,APIKIT:BAD_REQUEST,APIKIT:NOT_FOUND,APIKIT:METHOD_NOT_ALLOWED,APIKIT:UNSUPPORTED_MEDIA_TYPE,APIKIT:NOT_IMPLEMENTED" >
 			<flow-ref doc:name="Flow Reference" doc:id="2f8605c9-bd80-4b43-b290-2f65d26b38ab" name="global-error-handlersSub_Flow"/>
-		</on-error-propagate>
-		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate1" doc:id="bdc7a8fc-b8a7-4dfd-813c-f0dc116ece0a" type="APIKIT:NOT_FOUND" >
-			<flow-ref doc:name="Flow Reference" doc:id="fffe7412-2ab6-415e-8bcf-cfe9f100dc7b" name="global-error-handlersSub_Flow" />
-		</on-error-propagate>
-		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate2" doc:id="0c2adc5a-2f0e-4459-a427-817b3ab25c53" type="APIKIT:METHOD_NOT_ALLOWED" >
-			<flow-ref doc:name="Flow Reference" doc:id="42c72be6-4b28-46d0-941d-4ee3ab0dd9a6" name="global-error-handlersSub_Flow" />
-		</on-error-propagate>
-		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate3" doc:id="2270d71e-deaf-4e22-abbe-65cbaff46dae" type="APIKIT:NOT_ACCEPTABLE" >
-			<flow-ref doc:name="Flow Reference" doc:id="7ce5958c-c671-4b59-9c02-3170ff4d0838" name="global-error-handlersSub_Flow" />
-		</on-error-propagate>
-		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate4" doc:id="e4e99d9c-44b7-47ff-9dc3-6e1a2be60048" type="APIKIT:UNSUPPORTED_MEDIA_TYPE" >
-			<flow-ref doc:name="Flow Reference" doc:id="9078c9df-caa2-4541-947c-349423780f05" name="global-error-handlersSub_Flow" />
-		</on-error-propagate>
-		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate5" doc:id="6c62c257-3552-4f41-b2ef-288720fecfe1" type="APIKIT:NOT_IMPLEMENTED" >
-			<flow-ref doc:name="Flow Reference" doc:id="ed8da26d-c203-4c53-91b0-b0fe887b07a4" name="global-error-handlersSub_Flow" />
 		</on-error-propagate>
 	</error-handler>
 	<sub-flow name="global-error-handlersSub_Flow" doc:id="cc1bb4e6-312e-4832-ae80-5683e9d04c68" >
